@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+// Title, image
+
 class CellTop: UITableViewCell {
     
     // MARK: - Variables

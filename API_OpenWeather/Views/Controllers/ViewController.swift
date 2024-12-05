@@ -23,7 +23,7 @@ class ViewController: UIViewController, Logable {
         // Register cells
         tableView.register(CellTop.self, forCellReuseIdentifier: CellTop.identifier)
         tableView.register(CellWeekWether.self, forCellReuseIdentifier: CellWeekWether.identifier)
-        tableView.register(CellMiddle.self, forCellReuseIdentifier: CellMiddle.identifier)
+        tableView.register(CellTodayWeather.self, forCellReuseIdentifier: CellTodayWeather.identifier)
         tableView.register(CellBottom.self, forCellReuseIdentifier: CellBottom.identifier)
         tableView.register(CellHoursWeather.self, forCellReuseIdentifier: CellHoursWeather.identifier)
         
@@ -225,7 +225,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: CellMiddle.identifier, for: indexPath) as! CellMiddle
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellTodayWeather.identifier, for: indexPath) as! CellTodayWeather
             cell.configureMiddleCell(with: DataManager.shared.weatherArray[0])
             cell.selectedBackgroundView = getClearView()
             return cell

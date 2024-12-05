@@ -21,7 +21,7 @@
 		B7704A5A2C932A2300B20DA4 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = B7704A592C932A2300B20DA4 /* Base */; };
 		B7704A6C2C93431E00B20DA4 /* WeatherRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7704A6B2C93431E00B20DA4 /* WeatherRequest.swift */; };
 		B7704A6F2C9434AB00B20DA4 /* CellTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7704A6E2C9434AB00B20DA4 /* CellTop.swift */; };
-		B7704A712C94448F00B20DA4 /* CellMiddle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7704A702C94448F00B20DA4 /* CellMiddle.swift */; };
+		B7704A712C94448F00B20DA4 /* CellTodayWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7704A702C94448F00B20DA4 /* CellTodayWeather.swift */; };
 		B7704A742C9480FF00B20DA4 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = B7704A732C9480FF00B20DA4 /* SDWebImage */; };
 		B7704A762C9480FF00B20DA4 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B7704A752C9480FF00B20DA4 /* SDWebImageMapKit */; };
 		B7704A7A2C95DB5E00B20DA4 /* WeatherAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7704A792C95DB5E00B20DA4 /* WeatherAPI.swift */; };
@@ -41,6 +41,7 @@
 		B78CE5D02CD2758900B218B2 /* CellHoursWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78CE5CF2CD2758900B218B2 /* CellHoursWeather.swift */; };
 		B78CE5D22CD5B3D300B218B2 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78CE5D12CD5B3D300B218B2 /* UIFont.swift */; };
 		B78CE5D42CD7A2CB00B218B2 /* dprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78CE5D32CD7A2CB00B218B2 /* dprint.swift */; };
+		B7A35B952CFB1C7F0081B441 /* Label_Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A35B942CFB1C7F0081B441 /* Label_Line.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,7 +61,7 @@
 		B7704A5B2C932A2300B20DA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B7704A6B2C93431E00B20DA4 /* WeatherRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRequest.swift; sourceTree = "<group>"; };
 		B7704A6E2C9434AB00B20DA4 /* CellTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTop.swift; sourceTree = "<group>"; };
-		B7704A702C94448F00B20DA4 /* CellMiddle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellMiddle.swift; sourceTree = "<group>"; };
+		B7704A702C94448F00B20DA4 /* CellTodayWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTodayWeather.swift; sourceTree = "<group>"; };
 		B7704A792C95DB5E00B20DA4 /* WeatherAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPI.swift; sourceTree = "<group>"; };
 		B7704A7B2C95DB7900B20DA4 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		B7704A7D2C9706B700B20DA4 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 		B78CE5CF2CD2758900B218B2 /* CellHoursWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellHoursWeather.swift; sourceTree = "<group>"; };
 		B78CE5D12CD5B3D300B218B2 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		B78CE5D32CD7A2CB00B218B2 /* dprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dprint.swift; sourceTree = "<group>"; };
+		B7A35B942CFB1C7F0081B441 /* Label_Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label_Line.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,8 +198,9 @@
 		B7704A6D2C94348400B20DA4 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				B7A35B932CFB1C4F0081B441 /* Helpers */,
 				B7704A6E2C9434AB00B20DA4 /* CellTop.swift */,
-				B7704A702C94448F00B20DA4 /* CellMiddle.swift */,
+				B7704A702C94448F00B20DA4 /* CellTodayWeather.swift */,
 				B7704A812CA06C4600B20DA4 /* CellBottom.swift */,
 				B75213FE2CA810F40010CFC3 /* CellWeekWether.swift */,
 				B78CE5CF2CD2758900B218B2 /* CellHoursWeather.swift */,
@@ -235,6 +238,14 @@
 				B78CE5C22CCD29C600B218B2 /* AntipastoPro-Bold_trial.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		B7A35B932CFB1C4F0081B441 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B7A35B942CFB1C7F0081B441 /* Label_Line.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,9 +342,10 @@
 				B7704A7A2C95DB5E00B20DA4 /* WeatherAPI.swift in Sources */,
 				B7704A822CA06C4600B20DA4 /* CellBottom.swift in Sources */,
 				B75214032CAAABD60010CFC3 /* ForecastModel.swift in Sources */,
+				B7A35B952CFB1C7F0081B441 /* Label_Line.swift in Sources */,
 				B705E1262CB7D7F400FDFE3A /* UIColor.swift in Sources */,
 				B78CE5D02CD2758900B218B2 /* CellHoursWeather.swift in Sources */,
-				B7704A712C94448F00B20DA4 /* CellMiddle.swift in Sources */,
+				B7704A712C94448F00B20DA4 /* CellTodayWeather.swift in Sources */,
 				B7704A522C932A2200B20DA4 /* ViewController.swift in Sources */,
 				B78CE5D42CD7A2CB00B218B2 /* dprint.swift in Sources */,
 				B75213FC2CA6C72C0010CFC3 /* UserSaving.swift in Sources */,

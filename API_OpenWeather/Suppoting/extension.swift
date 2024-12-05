@@ -32,7 +32,7 @@ extension UIView {
 
 extension Float {
     func convertFarhToCelsium() -> Float {
-        var celsium = (self - 32.0) / 1.8
+        let celsium = (self - 32.0) / 1.8
         return celsium
     }
     
