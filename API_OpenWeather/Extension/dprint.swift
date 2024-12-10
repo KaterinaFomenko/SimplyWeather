@@ -21,21 +21,6 @@ protocol Logable {
 
 
 class d {
-    /*
-    static var flag: Bool = false
-    
-    static func print(str: String, logType: LogType) {
-        
-        if logType == .api {
-            flag = true
-        }
-        
-        if flag {
-            Swift.print(str)
-        }
-        
-    }
-    */
     
     static func print(_ str: String, _ source: Logable) {
         if source.logOn {

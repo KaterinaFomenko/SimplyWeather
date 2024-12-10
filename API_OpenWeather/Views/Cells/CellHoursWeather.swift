@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-enum Hours: String, CaseIterable {
+enum HoursMock: String, CaseIterable {
     case hour0 = "00"
     case hour3 = "03"
     case hour6 = "06"
@@ -27,7 +27,7 @@ enum Hours: String, CaseIterable {
     case hour021 = "021"
 }
 
-enum TempOfHours: String, CaseIterable {
+enum TempOfHoursMock: String, CaseIterable {
     case hour0 = "00"
     case hour3 = "03"
     case hour6 = "06"
@@ -46,7 +46,7 @@ enum TempOfHours: String, CaseIterable {
     case hour021 = "021"
 }
 
-enum ImagesOfHours: CaseIterable {
+enum ImagesOfHoursMock: CaseIterable {
     case mon1Image
     case mon2Image
     case mon3Image
@@ -102,7 +102,8 @@ enum ImagesOfHours: CaseIterable {
     }
 }
 
-class CellHoursWeather: UITableViewCell {
+class CellHoursWeather: UITableViewCell, Logable {
+    var logOn: Bool = false
     
     // MARK: - Variables
     
@@ -114,23 +115,89 @@ class CellHoursWeather: UITableViewCell {
     
     // MARK: - UI Components
     
+    private let titleLabel: UILabel = {
+        
+        let label = UIElementFactory.createLabel(
+            text: "Hourly Forecast",
+            color: .white,
+            font: UIFont.customFont(size: 25, weight: .regular)
+        )
+        //label.textAlignment = .center
+            return label
+    }()
+    
+    private let line: UIView = {
+        let line = UIElementFactory.createLine()
+        return line
+    }()
+    
+    private lazy var titleLineStack: UIStackView = {
+        let vStack = UIElementFactory.createStackView(
+            arrangedSubview: [titleLabel, line],
+            axis: .vertical,
+            spacing: 20,
+            alignment: .fill
+        )
+        return vStack
+    }()
+    
+    private var hoursStackView: UIStackView {
+        return UIElementFactory.createStackView(
+            arrangedSubview: hoursLabels,
+            axis: .horizontal,
+            spacing: 8,
+            alignment: .center,
+            distributon: .fillEqually
+        )
+    }
+    
+    private var tempsStackView: UIStackView {
+        return UIElementFactory.createStackView(
+            arrangedSubview: tempsOneLabels,
+            axis: .horizontal,
+            spacing: 8,
+            alignment: .center,
+            distributon: .fillEqually
+        )
+    }
+    
+    private var imageStackView: UIStackView {
+        return UIElementFactory.createStackView(
+            arrangedSubview: imagesOneForecast,
+            axis: .horizontal,
+            spacing: 8,
+            alignment: .center,
+            distributon: .fillEqually
+        )
+    }
+    
+    private lazy var summaryStackView: UIStackView = {
+        let stack = UIElementFactory.createStackView(
+            arrangedSubview: [hoursStackView, tempsStackView, imageStackView],
+            axis: .vertical,
+            spacing: 0,
+            alignment: .fill,
+            distributon: .fillEqually
+        )
+       // stack.backgroundColor = .systemPink
+        return stack
+    }()
+    
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
-        // scroll.showsHorizontalScrollIndicator = true
-        // scroll.contentSize = contentSize
-        scroll.backgroundColor = .clear
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.bouncesVertically = false
         return scroll
     }()
     
-    private lazy var contentViewInScroll: UIView = {
-        let contentView = UIView()
-        contentView.setupBlurEffect()
-        contentView.roundCorner()
-        //   contentView.frame.size = contentSize
-        contentView.backgroundColor = .clear
-        return contentView
-    }()
-    
+    private lazy var blurEffectFonView: UIView = {
+            let contentView = UIView()
+            contentView.setupBlurEffect()
+            contentView.roundCorner()
+            contentView.translatesAutoresizingMaskIntoConstraints = false
+            return contentView
+        }()
+
     // MARK: - Life Cycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -150,23 +217,24 @@ class CellHoursWeather: UITableViewCell {
     // MARK: - Methods
     
     public func configure(array: [ForecastModel]) {
-        print("!!! arrayHours count: \(array.count) ")
+        d.print("!!! arrayHours count: \(array.count) ", self)
         let testArray = [
             ForecastModel(id: 804, temp: 55.36, dataTxt: "2024-10-31 12:00:00"),
             ForecastModel(id: 804, temp: 54.99, dataTxt: "2024-10-31 15:00:00")
         ]
         
         // Получаем 16 часов в двух днях
+        
         let hoursTwoDays = ForecastDataManager.shared.hoursForecastArray
-        // ??? hoursTwoDays.enumerated заменить на array: [ForecastModel
+            
         // Устанавливаем дни недели в labels
         for (i, hour) in hoursTwoDays.enumerated() {
             
-            print("+++HOUR==== \(hour)")
+            d.print("+++Значение \(hour)", self)
             if i < hoursLabels.count { // Проверяем, что индекс не выходит за пределы массива температур
                 
                 hoursLabels[i].text = array[i].dataTxt.extractHour()
-                print("!!! hoursLabels[i] : \(hoursLabels[i].text ?? "")")
+                d.print("!!! hoursLabels[i] : \(hoursLabels[i].text ?? "")", self)
                 
                 tempsOneLabels[i].text = array[i].temp.convertFarhToCelsium().rounded().convertToString() + "\u{00B0}"
                 
@@ -176,24 +244,27 @@ class CellHoursWeather: UITableViewCell {
     }
     
     private func setupLabels() {
-        for day in Hours.allCases {
+        hoursLabels.removeAll()
+        for hour in HoursMock.allCases {
             let label = UILabel()
             label.textColor = .systemGray6
             label.textAlignment = .center
             label.font = .systemFont(ofSize: 20, weight: .medium)
-            label.text = day.rawValue
+            label.text = hour.rawValue
             
             label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                label.heightAnchor.constraint(equalToConstant: 30), // Задание фиксированной высоты
-                label.widthAnchor.constraint(equalToConstant: 50)  // Задание фиксированной ширины
+                label.heightAnchor.constraint(equalToConstant: 30),
+                label.widthAnchor.constraint(equalToConstant: 50)
             ])
+            
             hoursLabels.append(label)
         }
     }
     
     private func setupTempsLabels() {
-        for tempElement in TempOfHours.allCases {
+        tempsOneLabels.removeAll()
+        for tempElement in TempOfHoursMock.allCases {
             let label = UILabel()
             label.textColor = .white
             label.textAlignment = .center
@@ -202,81 +273,60 @@ class CellHoursWeather: UITableViewCell {
             
             label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                label.heightAnchor.constraint(equalToConstant: 50), // Задание фиксированной высоты
-                label.widthAnchor.constraint(equalToConstant: 50)  // Задание фиксированной ширины
+                label.heightAnchor.constraint(equalToConstant: 50),
+                label.widthAnchor.constraint(equalToConstant: 50)
             ])
             tempsOneLabels.append(label)
         }
     }
     
     private func setupImagesOfDay() {
-        for imageCase in ImagesOfHours.allCases {
+        imagesOneForecast.removeAll()
+        for imageCase in ImagesOfHoursMock.allCases {
             let iv = UIImageView()
             iv.contentMode = .scaleAspectFit
             iv.image = imageCase.imageForDay
             iv.tintColor = .black
             
             iv.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                iv.heightAnchor.constraint(equalToConstant: 50), // Задание фиксированной высоты
-//                iv.widthAnchor.constraint(equalToConstant: 80)  // Задание фиксированной ширины
-//            ])
+            NSLayoutConstraint.activate([
+                iv.heightAnchor.constraint(equalToConstant: 50), // Задание фиксированной высоты
+                iv.widthAnchor.constraint(equalToConstant: 80)  // Задание фиксированной ширины
+            ])
             
             imagesOneForecast.append(iv)
         }
     }
     
     private func layoutLabels() {
-        let hoursStackView = UIStackView(arrangedSubviews: hoursLabels)
-        hoursStackView.axis = .horizontal
-        hoursStackView.spacing = 8
-        hoursStackView.distribution = .fillEqually
-        hoursStackView.alignment = .center
         
-        let tempsStackView = UIStackView(arrangedSubviews: tempsOneLabels)
-        tempsStackView.axis = .horizontal
-        tempsStackView.spacing = 8
-        tempsStackView.distribution = .fillEqually
-        tempsStackView.alignment = .center
-        
-        let imageStackView = UIStackView(arrangedSubviews: imagesOneForecast)
-        imageStackView.axis = .horizontal
-        imageStackView.spacing = 8
-        imageStackView.distribution = .fillEqually
-        imageStackView.alignment = .center
-        
-        let mainStackView = UIStackView(arrangedSubviews: [hoursStackView, imageStackView, tempsStackView])
-        mainStackView.axis = .vertical
-        mainStackView.spacing = 0
-        mainStackView.distribution = .fillEqually
-        
-        contentView.addSubview(scrollView)
-        scrollView.addSubview(contentViewInScroll)
-        contentViewInScroll.addSubview(mainStackView)
-        
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentViewInScroll.translatesAutoresizingMaskIntoConstraints = false
-        mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(blurEffectFonView)
+        blurEffectFonView.addSubview(titleLineStack)
+        blurEffectFonView.addSubview(scrollView)
+        scrollView.addSubview(summaryStackView)
         
         NSLayoutConstraint.activate([
+            //backgroundColor = .systemPink
+            summaryStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
+            summaryStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
+            summaryStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
+            summaryStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
             
-            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            titleLineStack.topAnchor.constraint(equalTo: blurEffectFonView.topAnchor, constant: 20),
+            titleLineStack.bottomAnchor.constraint(equalTo: scrollView.topAnchor, constant: -10),
+            titleLineStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 20),
+            titleLineStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -20),
             
-            contentViewInScroll.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentViewInScroll.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentViewInScroll.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
-            contentViewInScroll.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            //backgroundColor = .brown
+            scrollView.topAnchor.constraint(equalTo: titleLineStack.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: blurEffectFonView.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor),
             
-            mainStackView.topAnchor.constraint(equalTo: contentViewInScroll.topAnchor, constant: 0),
-            mainStackView.bottomAnchor.constraint(equalTo: contentViewInScroll.bottomAnchor, constant: 0),
-            mainStackView.leadingAnchor.constraint(equalTo: contentViewInScroll.leadingAnchor, constant: 20),
-            mainStackView.trailingAnchor.constraint(equalTo: contentViewInScroll.trailingAnchor, constant: -20),
-            
-            mainStackView.heightAnchor.constraint(equalToConstant: 150) // 200
+            blurEffectFonView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            blurEffectFonView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            blurEffectFonView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            blurEffectFonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
         ])
     }
     
@@ -284,9 +334,9 @@ class CellHoursWeather: UITableViewCell {
         super.layoutSubviews()
         
         // Обновляем размер градиентного слоя при изменении размеров ячейки
-        contentViewInScroll.layer.sublayers?.forEach { layer in
+        blurEffectFonView.layer.sublayers?.forEach { layer in
             if layer is CAGradientLayer {
-                layer.frame = contentViewInScroll.bounds
+                layer.frame = blurEffectFonView.bounds
             }
         }
     }

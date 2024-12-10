@@ -18,7 +18,6 @@ class ForecastDataManager: Logable {
     
     var forecastArray: [ForecastModel] = []
     var hoursForecastArray: [ForecastModel] = []
-   
     var weekArray: [String] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
     
     // MARK: - Life Cycle
@@ -43,11 +42,6 @@ class ForecastDataManager: Logable {
             self.hoursForecastArray.removeAll()
             
             for element in weatherApiData.list {
-//              место func configure
-//              { var fm = ForecastModel()
-//                fm.id = element.weather.first?.id ?? 0
-//                fm.dataTxt = element.dt_txt }
-                
                 self.forecastArray.append(element.toForecastModel())
                 self.hoursForecastArray.append(element.toForecastModel())
             }
@@ -57,13 +51,13 @@ class ForecastDataManager: Logable {
             
             self.forecastArray = self.filterSevenDays()
             let filteredHours = self.filterTwoDays(self.hoursForecastArray)
+            self.hoursForecastArray = filteredHours
             
             d.print("=== self.forecastArray Filtered:\(self.forecastArray.count)", self)
             d.print("!!! filterTwoDays \(self.hoursForecastArray.count)", self)
             d.print("!!! filterTwoDays \(filteredHours)", self)
             
             DispatchQueue.main.async {
-                
                 self.viewController?.updateData(nameCity: "")
             }
         }

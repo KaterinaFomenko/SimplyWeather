@@ -47,10 +47,21 @@ class UIElementFactory {
         line.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-        line.heightAnchor.constraint(equalToConstant: height)
+            line.heightAnchor.constraint(equalToConstant: height)
         ])
         return line
     }
-}
     
+    static func createImageView(image: UIImage? = nil, tintColor: UIColor = .black, contentMode: UIView.ContentMode = .scaleAspectFit) -> UIImageView {
+        let imageView = UIImageView()
+        imageView.image = image
+        imageView.tintColor = tintColor
+        imageView.contentMode = contentMode
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }
+    
+}
+
+
 

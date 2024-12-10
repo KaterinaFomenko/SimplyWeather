@@ -18,28 +18,28 @@ class CellTop: UITableViewCell {
     // MARK: - UI Components
     // stack labels + image
     private lazy var vStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [gorStack, imageViewCell])
+        let vStack = UIStackView(arrangedSubviews: [imageViewCell])
         vStack.backgroundColor = .clear
         vStack.axis = .vertical
-        vStack.distribution = .equalSpacing
-        vStack.alignment = .center
+        vStack.distribution = .fill
+        //vStack.alignment = .center
         return vStack
     }()
     
     // stack labels
-    private lazy var gorStack: UIStackView = {
+    private lazy var titlesStack: UIStackView = {
         let vStack = UIStackView(arrangedSubviews: [labelLeft, labelRight])
   //    vStackMainBottom.backgroundColor = .clear
-        vStack.axis = .horizontal
-        vStack.spacing = 5
-        vStack.distribution = .fillEqually
-        vStack.alignment = .center
+        vStack.axis = .vertical
+        vStack.spacing = 0
+        vStack.distribution = .equalSpacing
+        vStack.alignment = .leading
         return vStack
     }()
     
     private let imageViewCell: UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         iv.image = UIImage(systemName: "sun.rain")
         iv.tintColor = .label
@@ -50,7 +50,7 @@ class CellTop: UITableViewCell {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.customFont(size: 60, weight: .bold)
+        label.font = UIFont.customFont(size: 60, weight: .black)
         label.text = "Left Title"
         return label
     }()
@@ -80,39 +80,35 @@ class CellTop: UITableViewCell {
     
     // MARK: - Methods
     public func configureTopCell() {
-        imageViewCell.image = UIImage(named: "forecast-simple")
-        labelLeft.text = "Simply"
-        labelRight.text = "Weather"
+        imageViewCell.image = UIImage(named: "kartin-papik3")
+        labelLeft.text = "Weather"
+        labelRight.text = "Forecast"
     }
     
     private func setupUI() {
         contentView.clipsToBounds = true
         contentView.addSubview(vStack)
-        
+
         selectionStyle = .none
-        
+
         vStack.translatesAutoresizingMaskIntoConstraints = false
         imageViewCell.translatesAutoresizingMaskIntoConstraints = false
-        gorStack.translatesAutoresizingMaskIntoConstraints = false
-        
+        titlesStack.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
-            vStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            // Ограничения для vStack
+            vStack.topAnchor.constraint(equalTo: contentView.topAnchor),
             vStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            vStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            vStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            
-            gorStack.heightAnchor.constraint(equalToConstant: 70),
-            
-            imageViewCell.topAnchor.constraint(equalTo: gorStack.bottomAnchor),
-            imageViewCell.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageViewCell.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageViewCell.bottomAnchor.constraint(equalTo: vStack.bottomAnchor),
+            vStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            vStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            // Ограничения для imageViewCell
             imageViewCell.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-            
-            // Соотношение сторон (можно менять под нужные пропорции)
-            imageViewCell.heightAnchor.constraint(equalTo: imageViewCell.widthAnchor, multiplier: 0.4)
+            imageViewCell.heightAnchor.constraint(equalTo: imageViewCell.widthAnchor, multiplier: 0.25),
+
+            // Ограничения для titlesStack
+            titlesStack.heightAnchor.constraint(equalToConstant: 50)
         ])
-        
-        
     }
+
 }

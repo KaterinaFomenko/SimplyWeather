@@ -10,10 +10,12 @@ import Foundation
 class Constant {
     static var cornerRadius: CGFloat = 8.0
     
-    static var heightCellTop: CGFloat = 250
+    static var heightCellTop: CGFloat = 100
+    
     static var heightCellToday: CGFloat = 250
     
-    static var heightCellHours: CGFloat = 150
+    static var heightCellHours: CGFloat = 230
+    
     static var heightWeatherWeek: CGFloat = 150
     
     static var heightCellBottom: CGFloat = 150
