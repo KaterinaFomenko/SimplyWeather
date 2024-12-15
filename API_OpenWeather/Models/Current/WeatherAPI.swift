@@ -8,7 +8,6 @@
 import Foundation
 
 struct WeatherAPI: Decodable {
-    
     var weather: [Weather]
     var main: Main
     var name: String?
@@ -16,8 +15,9 @@ struct WeatherAPI: Decodable {
     func toWeatherModel() -> WeatherModel {
         var weatherModel = WeatherModel()
         weatherModel.id = weather[0].id
-        weatherModel.tempMax = main.temp_max
-        weatherModel.tempMin = main.temp_min
+        weatherModel.temp = main.temp
+       // weatherModel.tempMax = main.temp_max
+       // weatherModel.tempMin = main.temp_min
         weatherModel.mainWeather = weather[0].main
         weatherModel.description = weather[0].description
         weatherModel.nameCity = name
@@ -34,6 +34,7 @@ struct Weather: Decodable {
 }
 
 struct Main: Decodable {
+    var temp: Float
     var temp_min: Float
     var temp_max: Float
 }

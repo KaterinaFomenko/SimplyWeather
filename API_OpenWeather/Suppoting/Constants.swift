@@ -12,7 +12,7 @@ class Constant {
     
     static var heightCellTop: CGFloat = 100
     
-    static var heightCellToday: CGFloat = 250
+    static var heightCellToday: CGFloat = 230
     
     static var heightCellHours: CGFloat = 230
     

@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 
 class ViewController: UIViewController, Logable {
-    var logOn: Bool = false
+    var logOn: Bool = true
     
     private var tableViewBottomConstraint: NSLayoutConstraint!
     
@@ -24,8 +24,8 @@ class ViewController: UIViewController, Logable {
         tableView.register(CellTop.self, forCellReuseIdentifier: CellTop.identifier)
         tableView.register(CellWeekWether.self, forCellReuseIdentifier: CellWeekWether.identifier)
         tableView.register(CellTodayWeather.self, forCellReuseIdentifier: CellTodayWeather.identifier)
-        tableView.register(CellBottom.self, forCellReuseIdentifier: CellBottom.identifier)
-        tableView.register(CellHoursWeather.self, forCellReuseIdentifier: CellHoursWeather.identifier)
+        tableView.register(SearchLocationCell.self, forCellReuseIdentifier: SearchLocationCell.identifier)
+        tableView.register(CellHourlyForecast.self, forCellReuseIdentifier: CellHourlyForecast.identifier)
         
         return tableView
     }()
@@ -78,7 +78,7 @@ class ViewController: UIViewController, Logable {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear")
+        d.print("viewDidAppear", self)
         self.view.setGradientBackground(UIColor(hex: "5598E4"), UIColor(hex: "7CADD0"))
         
         //        if let firstWeather = DataManager.shared.weatherArray.first {
@@ -111,7 +111,7 @@ class ViewController: UIViewController, Logable {
     @objc func sendCityNameNotification(_ notification: Notification) {
         if let userInfo = notification.userInfo,
            let currentCity = userInfo["CityName"] as? String {
-            print("CurrentLocation info from VC: \(currentCity)")
+            d.print("CurrentLocation info from VC: \(currentCity)", self)
             DataManager.shared.loadData(nameCity: currentCity)
             ForecastDataManager.shared.loadDataForecast(nameCity: currentCity)
         }
@@ -156,7 +156,7 @@ class ViewController: UIViewController, Logable {
     func updateData(nameCity: String) {
         
         if !nameCity.isEmpty {
-            print("+++Save City = \(nameCity)")
+            d.print("+++Save City = \(nameCity)", self)
             UserSaving.saveParam(key: .savedCity, value: nameCity)
         }
         
@@ -193,7 +193,7 @@ class ViewController: UIViewController, Logable {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("5. размер массива weatherArray \(DataManager.shared.weatherArray.count)")
+        d.print("5. размер массива weatherArray \(DataManager.shared.weatherArray.count)", self)
         return DataManager.shared.weatherArray.count
     }
     
@@ -220,34 +220,48 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.row {
         case 0 :
-            let cell = tableView.dequeueReusableCell(withIdentifier: CellTop.identifier, for: indexPath) as! CellTop
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: CellTop.identifier,
+                for: indexPath
+            ) as! CellTop
             cell.configureTopCell()
             return cell
             
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: CellTodayWeather.identifier, for: indexPath) as! CellTodayWeather
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: CellTodayWeather.identifier,
+                for: indexPath
+            ) as! CellTodayWeather
             cell.configureMiddleCell(with: DataManager.shared.weatherArray[0])
             cell.selectedBackgroundView = getClearView()
             return cell
             
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: CellHoursWeather.identifier, for: indexPath) as! CellHoursWeather
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: CellHourlyForecast.identifier,
+                for: indexPath
+            ) as! CellHourlyForecast
             let hoursForecastArray = ForecastDataManager.shared.hoursForecastArray
-            print("!!! VC Data from hoursForecastArray \(hoursForecastArray)")
+            d.print("!!! VC Data from hoursForecastArray \(hoursForecastArray)", self)
             cell.configure(array: hoursForecastArray)
             cell.selectedBackgroundView = getClearView() // selectedBackgroundView
             return cell
             
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: CellWeekWether.identifier, for: indexPath) as! CellWeekWether
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: CellWeekWether.identifier,
+                for: indexPath
+            ) as! CellWeekWether
             let forecastArray = ForecastDataManager.shared.forecastArray
-            print("===VC Data from ForecastDataManager \(forecastArray)")
+            d.print("===VC Data from ForecastDataManager \(forecastArray)", self)
             cell.configure(array: forecastArray)
             cell.selectedBackgroundView = getClearView() // selectedBackgroundView
             return cell
             
         case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: CellBottom.identifier, for: indexPath) as! CellBottom
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: SearchLocationCell.identifier,
+                for: indexPath) as! SearchLocationCell
             cell.selectedBackgroundView = getClearView()
             return cell
             

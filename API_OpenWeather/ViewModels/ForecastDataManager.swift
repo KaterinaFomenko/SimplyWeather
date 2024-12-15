@@ -22,21 +22,18 @@ class ForecastDataManager: Logable {
     
     // MARK: - Life Cycle
     
-    private init() {
-        // Приватный инициализатор, который предотвращает создание других экземпляров класса.
-        // Это стандартная практика для синглтонов.
-    }
+    private init() {  }
     
     // MARK: Load Data
     
     func loadDataForecast(nameCity: String) {
         WeatherRequest().getForecast(nameCity: nameCity) { weatherApiData, error in
             guard let weatherApiData = weatherApiData else {
-                d.print("Ошибка: \(error ?? "Неизвестная ошибка")", self)
+                print("Ошибка: \(error ?? "Неизвестная ошибка")")
                 return
             }
             
-            print("===getForecast: weatherApiData \(weatherApiData)", self)
+            d.print("===getForecast: weatherApiData \(weatherApiData)", self)
             
             self.forecastArray.removeAll()
             self.hoursForecastArray.removeAll()
@@ -67,7 +64,7 @@ class ForecastDataManager: Logable {
         let doubleWeek = weekArray + weekArray
         let nextDay = (weekArray.firstIndex(of: toDay) ?? 0) + 1
         let fiveDaysArray = doubleWeek[nextDay ..< nextDay + 5]
-        print("Array(fiveDaysArray): \(Array(fiveDaysArray))")
+        d.print("Array(fiveDaysArray): \(Array(fiveDaysArray))", self)
         return Array(fiveDaysArray)
     }
     

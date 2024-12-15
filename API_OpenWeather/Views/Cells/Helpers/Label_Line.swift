@@ -15,13 +15,13 @@ class UIElementFactory {
         axis: NSLayoutConstraint.Axis,
         spacing: CGFloat,
         alignment: UIStackView.Alignment = .fill,
-        distributon:  UIStackView.Distribution = .fill)
+        distribution:  UIStackView.Distribution = .fill)
     -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: arrangedSubview)
         stackView.axis = axis
         stackView.spacing = spacing
         stackView.alignment = alignment
-        stackView.distribution = distributon
+        stackView.distribution = distribution
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }

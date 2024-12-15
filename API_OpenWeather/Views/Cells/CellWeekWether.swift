@@ -238,10 +238,6 @@ class CellWeekWether: UITableViewCell {
         mainStackView.spacing = 0
         mainStackView.distribution = .fillEqually
         
-         // First commit 
-        
-        
-
         contentViewInScroll.addSubview(mainStackView)
         contentView.addSubview(contentViewInScroll)
         

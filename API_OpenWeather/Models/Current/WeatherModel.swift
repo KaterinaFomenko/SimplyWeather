@@ -14,10 +14,14 @@ public struct WeatherModel {
     var nameCity: String?
     var mainWeather: String = ""
     var description: String = ""
+    var temp: Float = 0
     var tempMin: Float = 0
     var tempMax: Float = 0
-    var temp: Float = 0
     var dataTxt : String = ""
+    
+    var tempString: String {
+        return String(format:"%.1f", temp)
+    }
     
     var tempMinString: String {
         return String(format: "%.1f", tempMin)
@@ -25,10 +29,6 @@ public struct WeatherModel {
     
     var tempMaxString: String {
         return String(format: "%.1f", tempMax)
-    }
-    
-    var tempString: String {
-        return String(format:"%.1f", temp)
     }
     
     var logoURL: URL? {

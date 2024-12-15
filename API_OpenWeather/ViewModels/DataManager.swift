@@ -6,8 +6,8 @@
 //
 import Foundation
 
-class DataManager: Logable {
-    var logOn = false
+class DataManager: Logable  {
+    var logOn = true
     
     private var locationManager: LocationManager?
     
@@ -24,20 +24,18 @@ class DataManager: Logable {
     WeatherModel(id: 502, nameCity: "Mock2", mainWeather: "sunni2", description: "sunni2", tempMin: -0, tempMax: -1),
     WeatherModel(id: 503, nameCity: "Mock3", mainWeather: "sunni3", description: "sunni3", tempMin: -0, tempMax: -1),
     WeatherModel(id: 503, nameCity: "Mock3", mainWeather: "sunni3", description: "sunni3", tempMin: -0, tempMax: -1)
+    //WeatherModel(id: 503, nameCity: "Mock3", mainWeather: "sunni3", description: "sunni3", tempMin: -0, tempMax: -1)
     ]
     
     // MARK: - Life Cycle
-    
-    // Сделай инициализатор приватным, чтобы нельзя было создать ещё одного мишку
-    private init() {
-
-    }
+    private init() { }
     
     // MARK: Load Data
     func loadData(nameCity: String) {
         WeatherRequest().getWeather(nameCity: nameCity ) { weatherApiData, error in
             guard let weatherApiData = weatherApiData else {
-                d.print("Ошибка: \(error ?? "Неизвестная ошибка")", self)
+                d.print("API get weather Ошибка: \(error ?? "Неизвестная ошибка")", self)
+                self.weatherArray.append(contentsOf: self.mockArray)
                 return
             }
             d.print("+++getWeather weatherApiData \(weatherApiData)", self)
@@ -46,12 +44,11 @@ class DataManager: Logable {
             self.weatherArray.append(weatherApiData.toWeatherModel())
             self.weatherArray.append(contentsOf: self.mockArray)
             
-            print("New name of city \(nameCity)")
+            d.print("New name of city \(nameCity)", self)
 
             DispatchQueue.main.async {
-                // фон в зав-ти от ID:
-              //  self.viewController?.setBackGroundImage(self.weatherArray.first?.weatherIDBackground ?? "")
-                
+              // фон в зав-ти от ID:
+              // self.viewController?.setBackGroundImage(self.weatherArray.first?.weatherIDBackground ?? "")
                 self.viewController?.updateData(nameCity: nameCity)
             }
         }

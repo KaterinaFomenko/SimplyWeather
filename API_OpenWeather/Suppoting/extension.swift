@@ -27,7 +27,6 @@ extension UIView {
         layer.insertSublayer(gradientLayer, at: 0) // Вставляем слой под все остальные
         //layer.insertSublayer(gradientLayer, below: self.layer)
     }
-    
 }
 
 extension Float {

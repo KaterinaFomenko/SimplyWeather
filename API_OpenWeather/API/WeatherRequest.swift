@@ -9,7 +9,9 @@ import Foundation
 
 //https://api.openweathermap.org/data/2.5/weather?q=Sosnowiec&appid=18560c3e0951a14743dc5a9d2b174eb0
 
-class WeatherRequest {
+class WeatherRequest: Logable {
+    var logOn: Bool = false
+    
     // URL для API OpenWeatherMap
     let scheme = "https://"
     let baseURL = "api.openweathermap.org"
@@ -27,7 +29,7 @@ class WeatherRequest {
             completion(nil, "Invalid URL")
             return
         }
-        print(url)
+        //print(url)
         // Создаем запрос
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -38,13 +40,13 @@ class WeatherRequest {
                 completion(nil, "HTTP Request Failed: \(error.localizedDescription)")
                 return
             }
-            print("+++1.GetWeather.Data \(data)")
+            d.print("+++1.GetWeather.Data \(String(describing: data))", self)
             // Проверяем данные
             if let data = data {
                 do {
                     // Декодируем JSON в модель WeatherAPI
                     let weatherData = try JSONDecoder().decode(WeatherAPI.self, from: data)
-                    print("+++2. data from request \(weatherData)")
+                    d.print("+++2. data from request \(weatherData)", self)
                     completion(weatherData, nil)
                 } catch {
                     // Обрабатываем ошибки декодирования
@@ -65,7 +67,7 @@ class WeatherRequest {
             completion(nil, "Invalid URL")
             return
         }
-        print(url)
+        //print(url)
         
         // Создаем запрос
         var request = URLRequest(url: url)
@@ -77,13 +79,13 @@ class WeatherRequest {
                 completion(nil, "HTTP Request Failed: \(error.localizedDescription)")
                 return
             }
-            print("===1.getForecast.Data \(data)")
+            d.print("===1.getForecast.Data \(String(describing: data))",self)
             // Проверяем данные
             if let data = data {
                 do {
                     // Декодируем JSON в модель WeatherAPI
                     let weatherData = try JSONDecoder().decode(ForecastAPI.self, from: data)
-                    print("===2. data from Forecast request \(weatherData)")
+                    d.print("===2. data from Forecast request \(weatherData)", self)
                     completion(weatherData, nil)
                 } catch {
                     // Обрабатываем ошибки декодирования
