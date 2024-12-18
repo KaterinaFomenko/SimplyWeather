@@ -8,17 +8,17 @@
 import Foundation
 
 class Constant {
-    static var cornerRadius: CGFloat = 8.0
+    static var cornerRadius: CGFloat = 10.0
     
-    static var heightCellTop: CGFloat = 100
+    static var heightCellTop: CGFloat = 150
     
-    static var heightCellToday: CGFloat = 230
+    static var heightCellToday: CGFloat = 220
     
-    static var heightCellHours: CGFloat = 230
+    static var heightCellHours: CGFloat = 220
     
-    static var heightWeatherWeek: CGFloat = 150
+    static var heightWeatherWeek: CGFloat = 140
     
-    static var heightCellBottom: CGFloat = 150
+    static var heightSearchLocation: CGFloat = 100
     
     static var heightDefaultCell: CGFloat = 200
 }

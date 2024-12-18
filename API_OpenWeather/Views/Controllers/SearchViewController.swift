@@ -1,24 +1,18 @@
 //
-//  SearchLocationCell.swift
+//  SearchViewController.swift
 //  API_OpenWeather
 //
-//  Created by Катерина Фоменко on 22/09/2024.
+//  Created by Катерина Фоменко on 17/12/2024.
 //
 
 import Foundation
 import UIKit
 
-protocol SearchLocationCellDelegate: AnyObject {
-    func didBeginEditingInCell(_ cell: SearchLocationCell)
-}
-
-class SearchLocationCell: UITableViewCell, Logable  {
+class SearchViewController: UIViewController, Logable  {
     var logOn: Bool = true
-    weak var delegate:  SearchLocationCellDelegate?
     
     // MARK: - Variables
-    static let identifier = "SearchLocationCell"
-    weak var dataManager: DataManager?  
+    weak var dataManager: DataManager?
     
     // MARK: - UI Components
     private var viewFon: UIView = {
@@ -59,10 +53,6 @@ class SearchLocationCell: UITableViewCell, Logable  {
        
         return field
     }()
-    
-    @objc private func currentLocation() {
-        DataManager.shared.getCurrentLocation()   
-    }
 
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system) // Use .system for standard button styling
@@ -78,30 +68,36 @@ class SearchLocationCell: UITableViewCell, Logable  {
         return button
     }()
     
+    @objc private func currentLocation() {
+        d.print("Button currentLocation tapped!", self)
+        DataManager.shared.getCurrentLocation()
+        dismiss(animated: true)
+    }
+    
     @objc func buttonTapped() {
-        d.print("Button tapped!", self)
-        //textFieldDidEndEditing(searchField)
+        d.print("Button OK tapped!", self)
+        textFieldDidEndEditing(searchField)
     }
     
     // MARK: - Life Cycle
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        searchField.delegate = self
-        setupUI()
-
-        contentView.backgroundColor = .clear
-        self.backgroundColor = .clear
+    init() {
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
-   
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemGray
+        setupUI()
+    }
+    
     // MARK: - Methods
     private func setupUI() {
         
-        contentView.addSubview(viewFon)
+        view.addSubview(viewFon)
         viewFon.addSubview(searchField)
         viewFon.addSubview(actionButton)
         
@@ -110,10 +106,10 @@ class SearchLocationCell: UITableViewCell, Logable  {
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            viewFon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            viewFon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            viewFon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            viewFon.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            viewFon.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            viewFon.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            viewFon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            viewFon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             searchField.centerYAnchor.constraint(equalTo: viewFon.centerYAnchor),
             searchField.heightAnchor.constraint(equalToConstant: 35),
@@ -126,12 +122,12 @@ class SearchLocationCell: UITableViewCell, Logable  {
             actionButton.widthAnchor.constraint(equalToConstant: 40)
             ])
         
-      //  viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
+       // viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
     }
     
 //    override func layoutSubviews() {
 //           super.layoutSubviews()
-//           
+//
 //           // Обновляем размер градиентного слоя при изменении размеров ячейки
 //           viewFon.layer.sublayers?.forEach { layer in
 //               if layer is CAGradientLayer {
@@ -142,44 +138,35 @@ class SearchLocationCell: UITableViewCell, Logable  {
   
 }
 
-extension SearchLocationCell: UITextFieldDelegate {
+extension SearchViewController: UITextFieldDelegate {
     
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        d.print("searchField \(searchField.text!)", self)
-//        searchField.endEditing(true)
-//        return true
-//    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        delegate?.didBeginEditingInCell(self)
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        d.print("searchField \(searchField.text!)", self)
+        searchField.endEditing(true)
+        return true
     }
     
-//    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-//        d.print("textFieldShouldEndEditing", self)
-//        if textField.text != "" {
-//            return true
-//        } else {
-//            textField.placeholder = "Enter city"
-//            return true
-//        }
-//    }
-//    
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        d.print("textFieldDidEndEditing", self)
-//        if let nameCity = searchField.text {
-//            //dataManager?.loadData(nameCity: nameCity)
-//            
-//            // Можно использовать NotificationCenter, если нужно отправить уведомление
-//            let userInfo = ["CityName": nameCity]
-//            NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
-//        }
-//        searchField.text = ""
-//    }
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        d.print("textFieldShouldEndEditing", self)
+        if textField.text != "" {
+            return true
+        } else {
+            textField.placeholder = "Enter city"
+            return true
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        d.print("textFieldDidEndEditing", self)
+        if let nameCity = searchField.text {
+            //dataManager?.loadData(nameCity: nameCity)
+            
+            // Можно использовать NotificationCenter, если нужно отправить уведомление
+            let userInfo = ["CityName": nameCity]
+            NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
+        }
+        searchField.text = ""
+        dismiss(animated: true)
+    }
+
 }
-
-
-
-
-
-
-

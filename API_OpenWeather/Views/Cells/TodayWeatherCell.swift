@@ -1,5 +1,5 @@
 //
-//  CellTodayWeather.swift
+//  TodayWeatherCell.swift
 //  API_OpenWeather
 //
 //  Created by Катерина Фоменко on 13/09/2024.
@@ -11,7 +11,7 @@ import SDWebImage
 
 // Weather Today
 
-class CellTodayWeather: UITableViewCell {
+class TodayWeatherCell: UITableViewCell {
     // MARK: - Variables
     
     static let identifier = "CellTodayWeather"
@@ -215,12 +215,12 @@ class CellTodayWeather: UITableViewCell {
             blurEffectFonView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
             blurEffectFonView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             blurEffectFonView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            blurEffectFonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            blurEffectFonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             
             summaryStack.topAnchor.constraint(equalTo: descriptionLineStack.bottomAnchor),
             summaryStack.bottomAnchor.constraint(equalTo: blurEffectFonView.bottomAnchor, constant: -10),
             summaryStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 20),
-            summaryStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -20),
+            summaryStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -10),
             
             descriptionLineStack.topAnchor.constraint(equalTo: blurEffectFonView.topAnchor, constant: 0),
             descriptionLineStack.bottomAnchor.constraint(equalTo: summaryStack.topAnchor, constant: -20),

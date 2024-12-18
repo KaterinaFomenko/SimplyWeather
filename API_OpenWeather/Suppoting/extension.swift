@@ -59,7 +59,7 @@ extension UIView {
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         //blurEffectView.backgroundColor = UIColor.black.withAlphaComponent(0.01)
         blurEffectView.tag = 101
-        blurEffectView.alpha = 0.35
+        blurEffectView.alpha = 0.25
         
         //let overlayView = UIView(frame: bounds)
         //overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.1) // Затемнение
@@ -72,7 +72,7 @@ extension UIView {
     
     func roundCorner() {
         // Устанавливаем закругленные углы
-        layer.cornerRadius = 12 
+        layer.cornerRadius = Constant.cornerRadius
         layer.masksToBounds = true
     }
 }

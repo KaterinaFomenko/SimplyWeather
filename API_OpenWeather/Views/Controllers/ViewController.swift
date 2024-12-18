@@ -19,13 +19,14 @@ class ViewController: UIViewController, Logable {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
+        
         //tableView.backgroundColor = .orange
         // Register cells
         tableView.register(CellTop.self, forCellReuseIdentifier: CellTop.identifier)
         tableView.register(CellWeekWether.self, forCellReuseIdentifier: CellWeekWether.identifier)
-        tableView.register(CellTodayWeather.self, forCellReuseIdentifier: CellTodayWeather.identifier)
+        tableView.register(TodayWeatherCell.self, forCellReuseIdentifier: TodayWeatherCell.identifier)
         tableView.register(SearchLocationCell.self, forCellReuseIdentifier: SearchLocationCell.identifier)
-        tableView.register(CellHourlyForecast.self, forCellReuseIdentifier: CellHourlyForecast.identifier)
+        tableView.register(HourlyForecastCell.self, forCellReuseIdentifier: HourlyForecastCell.identifier)
         
         return tableView
     }()
@@ -174,6 +175,7 @@ class ViewController: UIViewController, Logable {
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.allowsSelection = true
+   //     tableView.isScrollEnabled = false
         tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         
         NSLayoutConstraint.activate([
@@ -209,7 +211,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         case 3:
             return Constant.heightWeatherWeek
         case 4:
-            return Constant.heightCellBottom
+            return Constant.heightSearchLocation
             
         default:
             return Constant.heightDefaultCell
@@ -229,18 +231,18 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             
         case 1:
             let cell = tableView.dequeueReusableCell(
-                withIdentifier: CellTodayWeather.identifier,
+                withIdentifier: TodayWeatherCell.identifier,
                 for: indexPath
-            ) as! CellTodayWeather
+            ) as! TodayWeatherCell
             cell.configureMiddleCell(with: DataManager.shared.weatherArray[0])
             cell.selectedBackgroundView = getClearView()
             return cell
             
         case 2:
             let cell = tableView.dequeueReusableCell(
-                withIdentifier: CellHourlyForecast.identifier,
+                withIdentifier: HourlyForecastCell.identifier,
                 for: indexPath
-            ) as! CellHourlyForecast
+            ) as! HourlyForecastCell
             let hoursForecastArray = ForecastDataManager.shared.hoursForecastArray
             d.print("!!! VC Data from hoursForecastArray \(hoursForecastArray)", self)
             cell.configure(array: hoursForecastArray)
@@ -262,6 +264,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: SearchLocationCell.identifier,
                 for: indexPath) as! SearchLocationCell
+            cell.delegate = self
             cell.selectedBackgroundView = getClearView()
             return cell
             

@@ -102,12 +102,12 @@ enum ImagesOfHoursMock: CaseIterable {
     }
 }
 
-class CellHourlyForecast: UITableViewCell, Logable {
+class HourlyForecastCell: UITableViewCell, Logable {
     var logOn: Bool = false
     
     // MARK: - Variables
     
-    static let identifier = "CellHourlyForecast"
+    static let identifier = "HourlyForecastCell"
     
     private var hoursLabels: [UILabel] = []
     private var tempsOneLabels: [UILabel] = []
@@ -186,6 +186,7 @@ class CellHourlyForecast: UITableViewCell, Logable {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
         scroll.bouncesVertically = false
+        scroll.showsVerticalScrollIndicator = false
         return scroll
     }()
     

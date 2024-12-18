@@ -8,32 +8,17 @@
 import Foundation
 import UIKit
 
-// Title, image
-
 class CellTop: UITableViewCell {
     
     // MARK: - Variables
    static let identifier = "CellTop"
     
     // MARK: - UI Components
-    // stack labels + image
     private lazy var vStack: UIStackView = {
         let vStack = UIStackView(arrangedSubviews: [imageViewCell])
-        vStack.backgroundColor = .clear
+        //vStack.backgroundColor = .green
         vStack.axis = .vertical
         vStack.distribution = .fill
-        //vStack.alignment = .center
-        return vStack
-    }()
-    
-    // stack labels
-    private lazy var titlesStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [labelLeft, labelRight])
-  //    vStackMainBottom.backgroundColor = .clear
-        vStack.axis = .vertical
-        vStack.spacing = 0
-        vStack.distribution = .equalSpacing
-        vStack.alignment = .leading
         return vStack
     }()
     
@@ -45,32 +30,11 @@ class CellTop: UITableViewCell {
         iv.tintColor = .label
         return iv
     }()
-   
-    private let labelLeft: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont.customFont(size: 60, weight: .black)
-        label.text = "Left Title"
-        return label
-    }()
-    
-    private let labelRight: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemYellow
-        label.textAlignment = .center
-        label.font = UIFont(name: "SF Compact Rounded", size: 50)
-        label.text = "Right Title"
-        return label
-    }()
-    
     
     // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-       // contentView.backgroundColor = .clear
         self.backgroundColor = .clear
-        
         setupUI()
     }
     
@@ -81,8 +45,6 @@ class CellTop: UITableViewCell {
     // MARK: - Methods
     public func configureTopCell() {
         imageViewCell.image = UIImage(named: "kartin-papik3")
-        labelLeft.text = "Weather"
-        labelRight.text = "Forecast"
     }
     
     private func setupUI() {
@@ -93,21 +55,19 @@ class CellTop: UITableViewCell {
 
         vStack.translatesAutoresizingMaskIntoConstraints = false
         imageViewCell.translatesAutoresizingMaskIntoConstraints = false
-        titlesStack.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             // Ограничения для vStack
-            vStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            vStack.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 0),
             vStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            vStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            vStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            vStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            vStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
 
             // Ограничения для imageViewCell
-            imageViewCell.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-            imageViewCell.heightAnchor.constraint(equalTo: imageViewCell.widthAnchor, multiplier: 0.25),
+            imageViewCell.widthAnchor.constraint(equalTo: vStack.widthAnchor),
+            imageViewCell.heightAnchor.constraint(equalTo: imageViewCell.widthAnchor, multiplier: 2),
+            imageViewCell.bottomAnchor.constraint(equalTo: vStack.bottomAnchor, constant: 0)
 
-            // Ограничения для titlesStack
-            titlesStack.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
