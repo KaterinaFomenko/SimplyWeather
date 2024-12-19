@@ -107,9 +107,10 @@ class SearchViewController: UIViewController, Logable  {
         
         NSLayoutConstraint.activate([
             viewFon.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            viewFon.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+           // viewFon.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
             viewFon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             viewFon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            viewFon.heightAnchor.constraint(equalToConstant: 80),
             
             searchField.centerYAnchor.constraint(equalTo: viewFon.centerYAnchor),
             searchField.heightAnchor.constraint(equalToConstant: 35),

@@ -48,7 +48,8 @@ class TodayWeatherCell: UITableViewCell {
         let label = UIElementFactory.createLabel(
             text: "TODAY",
             color: .white,
-            font: UIFont.customFont(size: 30, weight: .regular)
+            font: UIFont.customFont(size: 30, weight: .regular),
+            alignment: .left
         )
        // label.backgroundColor = .red
         return label
@@ -63,7 +64,7 @@ class TodayWeatherCell: UITableViewCell {
         )
         
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.4
         label.numberOfLines = 1
         
         let maxWidth: CGFloat = UIScreen.main.bounds.width - 40  // Например, ширина экрана минус отступы
@@ -88,11 +89,11 @@ class TodayWeatherCell: UITableViewCell {
         let vStack = UIElementFactory.createStackView(
             arrangedSubview: [todayLabel, cityLabel],
             axis: .horizontal,
-            spacing: 50,
+            spacing: 20,
             alignment: .fill,
             distribution: .fill
         )
-        // vStack.backgroundColor = .blue
+       // vStack.backgroundColor = .blue
         return vStack
     }()
     
@@ -130,7 +131,7 @@ class TodayWeatherCell: UITableViewCell {
         let vStack = UIElementFactory.createStackView(
             arrangedSubview: [todayCityNameStack, tempImageStack],
             axis: .vertical,
-            spacing: 10
+            spacing: 0
         )
         // vStack.isLayoutMarginsRelativeArrangement = true
         // vStack.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20)
@@ -215,17 +216,20 @@ class TodayWeatherCell: UITableViewCell {
             blurEffectFonView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
             blurEffectFonView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             blurEffectFonView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            blurEffectFonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            blurEffectFonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            summaryStack.topAnchor.constraint(equalTo: descriptionLineStack.bottomAnchor),
+            summaryStack.topAnchor.constraint(equalTo: descriptionLineStack.bottomAnchor, constant: 20),
             summaryStack.bottomAnchor.constraint(equalTo: blurEffectFonView.bottomAnchor, constant: -10),
-            summaryStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 20),
-            summaryStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -10),
+            summaryStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 40),
+            summaryStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -40),
+            
+            
             
             descriptionLineStack.topAnchor.constraint(equalTo: blurEffectFonView.topAnchor, constant: 0),
-            descriptionLineStack.bottomAnchor.constraint(equalTo: summaryStack.topAnchor, constant: -20),
+            //descriptionLineStack.bottomAnchor.constraint(equalTo: summaryStack.topAnchor, constant: -20),
             descriptionLineStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 20),
             descriptionLineStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -20),
+            descriptionLineStack.heightAnchor.constraint(equalToConstant: 40)
             
             //cityLabel.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: 10)
            

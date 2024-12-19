@@ -80,7 +80,7 @@ class SearchLocationCell: UITableViewCell, Logable  {
     
     @objc func buttonTapped() {
         d.print("Button tapped!", self)
-        //textFieldDidEndEditing(searchField)
+        textFieldDidEndEditing(searchField)
     }
     
     // MARK: - Life Cycle
@@ -150,9 +150,14 @@ extension SearchLocationCell: UITextFieldDelegate {
 //        return true
 //    }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         delegate?.didBeginEditingInCell(self)
+        return true
     }
+    
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        delegate?.didBeginEditingInCell(self)
+//    }
     
 //    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
 //        d.print("textFieldShouldEndEditing", self)
@@ -164,17 +169,17 @@ extension SearchLocationCell: UITextFieldDelegate {
 //        }
 //    }
 //    
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        d.print("textFieldDidEndEditing", self)
-//        if let nameCity = searchField.text {
-//            //dataManager?.loadData(nameCity: nameCity)
-//            
-//            // Можно использовать NotificationCenter, если нужно отправить уведомление
-//            let userInfo = ["CityName": nameCity]
-//            NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
-//        }
-//        searchField.text = ""
-//    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        d.print("textFieldDidEndEditing", self)
+        if let nameCity = searchField.text {
+            //dataManager?.loadData(nameCity: nameCity)
+            
+            // Можно использовать NotificationCenter, если нужно отправить уведомление
+            let userInfo = ["CityName": nameCity]
+            NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
+        }
+        searchField.text = ""
+    }
 }
 
 
