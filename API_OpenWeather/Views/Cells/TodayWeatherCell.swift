@@ -19,7 +19,6 @@ class TodayWeatherCell: UITableViewCell {
     // MARK: - UI Components
     
     // ---line + descriptionLabel---
-    
     private let descriptionLabel: UILabel = {
         UIElementFactory.createLabel(
             text: "Title",
@@ -42,13 +41,11 @@ class TodayWeatherCell: UITableViewCell {
     }()
     
     // ---today + cityLabel---
-    
-    
     private let todayLabel: UILabel = {
         let label = UIElementFactory.createLabel(
             text: "TODAY",
             color: .white,
-            font: UIFont.customFont(size: 30, weight: .regular),
+            font: UIFont.customFont(size: 25, weight: .regular),
             alignment: .left
         )
        // label.backgroundColor = .red

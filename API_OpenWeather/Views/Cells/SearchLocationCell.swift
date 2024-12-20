@@ -13,12 +13,12 @@ protocol SearchLocationCellDelegate: AnyObject {
 }
 
 class SearchLocationCell: UITableViewCell, Logable  {
-    var logOn: Bool = true
+    var logOn: Bool = false
     weak var delegate:  SearchLocationCellDelegate?
     
     // MARK: - Variables
     static let identifier = "SearchLocationCell"
-    weak var dataManager: DataManager?  
+    weak var dataManager: DataManager?
     
     // MARK: - UI Components
     private var viewFon: UIView = {
@@ -56,14 +56,10 @@ class SearchLocationCell: UITableViewCell, Logable  {
         containerView.addSubview(locationButton)
         
         field.leftView = containerView
-       
+        
         return field
     }()
     
-    @objc private func currentLocation() {
-        DataManager.shared.getCurrentLocation()   
-    }
-
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system) // Use .system for standard button styling
         let buttonImage = UIImage(systemName: "location.fill")
@@ -78,6 +74,10 @@ class SearchLocationCell: UITableViewCell, Logable  {
         return button
     }()
     
+    @objc private func currentLocation() {
+        DataManager.shared.getCurrentLocation()
+    }
+    
     @objc func buttonTapped() {
         d.print("Button tapped!", self)
         textFieldDidEndEditing(searchField)
@@ -89,7 +89,7 @@ class SearchLocationCell: UITableViewCell, Logable  {
         
         searchField.delegate = self
         setupUI()
-
+        
         contentView.backgroundColor = .clear
         self.backgroundColor = .clear
     }
@@ -97,7 +97,7 @@ class SearchLocationCell: UITableViewCell, Logable  {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-   
+    
     // MARK: - Methods
     private func setupUI() {
         
@@ -124,59 +124,48 @@ class SearchLocationCell: UITableViewCell, Logable  {
             actionButton.heightAnchor.constraint(equalToConstant: 35),
             actionButton.trailingAnchor.constraint(equalTo: viewFon.trailingAnchor, constant: -20),
             actionButton.widthAnchor.constraint(equalToConstant: 40)
-            ])
+        ])
         
-      //  viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
+        //  viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
     }
     
-//    override func layoutSubviews() {
-//           super.layoutSubviews()
-//           
-//           // Обновляем размер градиентного слоя при изменении размеров ячейки
-//           viewFon.layer.sublayers?.forEach { layer in
-//               if layer is CAGradientLayer {
-//                   layer.frame = viewFon.bounds
-//               }
-//           }
-//       }
-  
+    //    override func layoutSubviews() {
+    //           super.layoutSubviews()
+    //
+    //           // Обновляем размер градиентного слоя при изменении размеров ячейки
+    //           viewFon.layer.sublayers?.forEach { layer in
+    //               if layer is CAGradientLayer {
+    //                   layer.frame = viewFon.bounds
+    //               }
+    //           }
+    //       }
+    
 }
 
 extension SearchLocationCell: UITextFieldDelegate {
     
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        d.print("searchField \(searchField.text!)", self)
-//        searchField.endEditing(true)
-//        return true
-//    }
-    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        delegate?.didBeginEditingInCell(self)
+        delegate?.didBeginEditingInCell(self) // Переход на следующий экран
+        return false // Возвращаем false, чтобы клавиатура не отображалась
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
         return true
     }
     
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        delegate?.didBeginEditingInCell(self)
-//    }
-    
-//    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-//        d.print("textFieldShouldEndEditing", self)
-//        if textField.text != "" {
-//            return true
-//        } else {
-//            textField.placeholder = "Enter city"
-//            return true
-//        }
-//    }
-//    
     func textFieldDidEndEditing(_ textField: UITextField) {
         d.print("textFieldDidEndEditing", self)
-        if let nameCity = searchField.text {
+        if let nameCity = textField.text, !nameCity.isEmpty {
+            //1) на прямую передать
             //dataManager?.loadData(nameCity: nameCity)
             
-            // Можно использовать NotificationCenter, если нужно отправить уведомление
-            let userInfo = ["CityName": nameCity]
-            NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
+            //2) NotificationCenter
+            NotificationCenter.default.post(
+                name: .sendCityNameNotify,
+                object: nil,
+                userInfo: ["CityName": nameCity]
+            )
         }
         searchField.text = ""
     }

@@ -16,11 +16,11 @@ class SearchViewController: UIViewController, Logable  {
     
     // MARK: - UI Components
     private var viewFon: UIView = {
-        let vf = UIView()
-        vf.setupBlurEffect()
-        vf.roundCorner()
-        vf.backgroundColor = .clear
-        return vf
+        let view = UIView()
+        view.setupBlurEffect()
+        view.roundCorner()
+        view.backgroundColor = .clear
+        return view
     }()
     
     private let searchField: UITextField = {
@@ -37,23 +37,22 @@ class SearchViewController: UIViewController, Logable  {
         field.smartDashesType = .no // Отключение умных тире
         field.smartInsertDeleteType = .no
         field.autocorrectionType = .no
-        field.autocorrectionType = .no
         
         let locationButton = UIButton(type: .system)
         let image = UIImage(named: "blueLocation")
         locationButton.setImage(image, for: .normal)
         locationButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        locationButton.addTarget(self, action: #selector(currentLocation), for: .touchUpInside)
+        locationButton.addTarget(nil, action: #selector(currentLocation), for: .touchUpInside)
         
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         locationButton.center = containerView.center
         containerView.addSubview(locationButton)
         
         field.leftView = containerView
-       
+        
         return field
     }()
-
+    
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system) // Use .system for standard button styling
         let buttonImage = UIImage(systemName: "location.fill")
@@ -68,17 +67,6 @@ class SearchViewController: UIViewController, Logable  {
         return button
     }()
     
-    @objc private func currentLocation() {
-        d.print("Button currentLocation tapped!", self)
-        DataManager.shared.getCurrentLocation()
-        dismiss(animated: true)
-    }
-    
-    @objc func buttonTapped() {
-        d.print("Button OK tapped!", self)
-        textFieldDidEndEditing(searchField)
-    }
-    
     // MARK: - Life Cycle
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -87,10 +75,14 @@ class SearchViewController: UIViewController, Logable  {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray
+        view.backgroundColor = .lightGray
+        searchField.delegate = self
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
         setupUI()
     }
     
@@ -101,13 +93,16 @@ class SearchViewController: UIViewController, Logable  {
         viewFon.addSubview(searchField)
         viewFon.addSubview(actionButton)
         
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
         viewFon.translatesAutoresizingMaskIntoConstraints = false
         searchField.translatesAutoresizingMaskIntoConstraints = false
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             viewFon.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-           // viewFon.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
             viewFon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             viewFon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             viewFon.heightAnchor.constraint(equalToConstant: 80),
@@ -121,40 +116,59 @@ class SearchViewController: UIViewController, Logable  {
             actionButton.heightAnchor.constraint(equalToConstant: 35),
             actionButton.trailingAnchor.constraint(equalTo: viewFon.trailingAnchor, constant: -20),
             actionButton.widthAnchor.constraint(equalToConstant: 40)
-            ])
+        ])
         
-       // viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
+        // viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
     }
     
-//    override func layoutSubviews() {
-//           super.layoutSubviews()
-//
-//           // Обновляем размер градиентного слоя при изменении размеров ячейки
-//           viewFon.layer.sublayers?.forEach { layer in
-//               if layer is CAGradientLayer {
-//                   layer.frame = viewFon.bounds
-//               }
-//           }
-//       }
-  
+    private func setupGestureRecognizers() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    // MARK: - Actions
+    @objc private func currentLocation() {
+        d.print("Button currentLocation tapped!", self)
+        DataManager.shared.getCurrentLocation()
+        dismiss(animated: true)
+    }
+    
+    @objc private func buttonTapped() {
+        d.print("Button OK tapped!", self)
+        textFieldDidEndEditing(searchField)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
+// MARK: - UITextFieldDelegate
 extension SearchViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         d.print("searchField \(searchField.text!)", self)
-        searchField.endEditing(true)
+        d.print("Return button pressed", self)
+        textField.resignFirstResponder()
         return true
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         d.print("textFieldShouldEndEditing", self)
-        if textField.text != "" {
-            return true
-        } else {
+        if textField.text?.isEmpty == true {
             textField.placeholder = "Enter city"
-            return true
+            d.print("Empty text", self)
         }
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.text == "" {
+            textField.returnKeyType = .search
+        } else {
+            textField.returnKeyType = .done
+        }
+        textField.reloadInputViews() // Обновляем клавиатуру для применения изменений
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -169,5 +183,4 @@ extension SearchViewController: UITextFieldDelegate {
         searchField.text = ""
         dismiss(animated: true)
     }
-
 }
