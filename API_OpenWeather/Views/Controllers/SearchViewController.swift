@@ -8,11 +8,14 @@
 import Foundation
 import UIKit
 
-class SearchViewController: UIViewController, Logable  {
+class SearchViewController: UIViewController, Logable {
+    
     var logOn: Bool = true
     
     // MARK: - Variables
-    weak var dataManager: DataManager?
+  
+   // private var arrayRecentCities: [String] = []
+   // private var defaultCities = ["Los Angeles", "Barselona", "Paris", "Tokio", "London", "New York"]
     
     // MARK: - UI Components
     private var viewFon: UIView = {
@@ -42,7 +45,7 @@ class SearchViewController: UIViewController, Logable  {
         let image = UIImage(named: "blueLocation")
         locationButton.setImage(image, for: .normal)
         locationButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        locationButton.addTarget(nil, action: #selector(currentLocation), for: .touchUpInside)
+        locationButton.addTarget(self, action: #selector(currentLocation), for: .touchUpInside)
         
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         locationButton.center = containerView.center
@@ -67,6 +70,13 @@ class SearchViewController: UIViewController, Logable  {
         return button
     }()
     
+    private let listTableView: UITableView = {
+       let tableView = UITableView()
+        tableView.isHidden = true
+        //tableView.backgroundColor = .green
+        return tableView
+    }()
+    
     // MARK: - Life Cycle
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -79,27 +89,41 @@ class SearchViewController: UIViewController, Logable  {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
+        listTableView.delegate = self
+        listTableView.dataSource = self
         searchField.delegate = self
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
+        SearchDataManager.shared.searchVC = self  // for singlton
+        
+        loadRecentCities()
+        updateCityHistory()
+        
         setupUI()
+        //setupGestureRecognizers()
     }
     
+    func updateCityHistory() {
+        listTableView.reloadData()
+        //listTableView.isHidden = arrayRecentCities.isEmpty
+        //listTableView.isHidden = SearchDataManager.shared.arrayRecentCities.isEmpty
+    }
     // MARK: - Methods
     private func setupUI() {
         
         view.addSubview(viewFon)
         viewFon.addSubview(searchField)
         viewFon.addSubview(actionButton)
+        view.addSubview(listTableView)
         
         setupConstraints()
+        setupCellTableView()
     }
     
     private func setupConstraints() {
         viewFon.translatesAutoresizingMaskIntoConstraints = false
         searchField.translatesAutoresizingMaskIntoConstraints = false
         actionButton.translatesAutoresizingMaskIntoConstraints = false
+        listTableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             viewFon.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
@@ -115,15 +139,30 @@ class SearchViewController: UIViewController, Logable  {
             actionButton.centerYAnchor.constraint(equalTo: searchField.centerYAnchor),
             actionButton.heightAnchor.constraint(equalToConstant: 35),
             actionButton.trailingAnchor.constraint(equalTo: viewFon.trailingAnchor, constant: -20),
-            actionButton.widthAnchor.constraint(equalToConstant: 40)
+            actionButton.widthAnchor.constraint(equalToConstant: 40),
+            
+            listTableView.topAnchor.constraint(equalTo: viewFon.bottomAnchor, constant: 20),
+            listTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            listTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            listTableView.heightAnchor.constraint(equalToConstant: 200)
         ])
         
         // viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
     }
     
-    private func setupGestureRecognizers() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
+//    private func setupGestureRecognizers() {
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+//        view.addGestureRecognizer(tapGesture)
+//    }
+    
+    private func setupCellTableView() {
+        listTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CityCell")
+    }
+    
+    private func loadRecentCities() {
+        if let savedCities = UserDefaults.standard.array(forKey: "RecentCities") as? [String] {
+            SearchDataManager.shared.arrayRecentCities = savedCities
+        }
     }
     
     // MARK: - Actions
@@ -135,52 +174,83 @@ class SearchViewController: UIViewController, Logable  {
     
     @objc private func buttonTapped() {
         d.print("Button OK tapped!", self)
-        textFieldDidEndEditing(searchField)
+        //textFieldDidEndEditing(searchField)
     }
     
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
-    }
+//    @objc private func dismissKeyboard() {
+//           view.endEditing(true)
+//    }
 }
 
 // MARK: - UITextFieldDelegate
 extension SearchViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        d.print("searchField \(searchField.text!)", self)
+        
         d.print("Return button pressed", self)
-        textField.resignFirstResponder()
+        //textField.resignFirstResponder()
         return true
     }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        //listTableView.reloadData()
+        listTableView.isHidden = SearchDataManager.shared.arrayRecentCities.isEmpty
+       }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         d.print("textFieldShouldEndEditing", self)
         if textField.text?.isEmpty == true {
             textField.placeholder = "Enter city"
-            d.print("Empty text", self)
         }
         return true
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField.text == "" {
-            textField.returnKeyType = .search
-        } else {
-            textField.returnKeyType = .done
-        }
-        textField.reloadInputViews() // Обновляем клавиатуру для применения изменений
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        SearchDataManager.shared.checkCityName(textField)
+//        d.print("textFieldDidEndEditing", self)
+//        guard let nameCity = textField.text, !nameCity.isEmpty else { return }
+//        
+//        if !SearchDataManager.shared.arrayRecentCities.contains(nameCity) {
+//            SearchDataManager.shared.arrayRecentCities.insert(nameCity, at: 0)
+//            if SearchDataManager.shared.arrayRecentCities.count > 9 {
+//                SearchDataManager.shared.arrayRecentCities.removeLast()
+//            }
+//            
+//            UserDefaults.standard.set(SearchDataManager.shared.arrayRecentCities, forKey: "RecentCities")
+//            UserDefaults.standard.synchronize()
+//        }
+//        // dataManager?.loadData(nameCity: nameCity)
+//        // Можно использовать NotificationCenter, если нужно отправить уведомление
+//        let userInfo = ["CityName": nameCity]
+//        NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
+//        
+//        searchField.text = ""
+//        //dismiss(animated: true)
+    }
+     
+}
+
+// MARK: - UITableViewDelegate
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        SearchDataManager.shared.getDisplayedCities().count
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        d.print("textFieldDidEndEditing", self)
-        if let nameCity = searchField.text {
-            //dataManager?.loadData(nameCity: nameCity)
-            
-            // Можно использовать NotificationCenter, если нужно отправить уведомление
-            let userInfo = ["CityName": nameCity]
-            NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
-        }
-        searchField.text = ""
-        dismiss(animated: true)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CityCell", for: indexPath)
+        let city = SearchDataManager.shared.getDisplayedCities()
+        cell.textLabel?.text = city[indexPath.row]
+        //cell.textLabel?.text = SearchDataManager.shared.arrayRecentCities[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        d.print("Delegat of tableView: didSelectRowAt", self)
+        let selectCity = SearchDataManager.shared.getDisplayedCities()[indexPath.row]
+        
+        searchField.text = selectCity
+        //listTableView.isHidden = true
+        searchField.resignFirstResponder()
+        //dismissKeyboard()
     }
 }

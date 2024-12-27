@@ -11,7 +11,6 @@ class ForecastDataManager: Logable {
     var logOn: Bool = false
     
     // MARK: - Variables
-    
     static var shared = ForecastDataManager()
     
     weak var viewController: ViewController?

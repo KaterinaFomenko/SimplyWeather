@@ -33,6 +33,7 @@
 		B7704A862CA2FDF300B20DA4 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7704A852CA2FDF300B20DA4 /* Notification.swift */; };
 		B78800DA2D114C0600EF8A26 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78800D92D114C0600EF8A26 /* SearchViewController.swift */; };
 		B78800DC2D12D19900EF8A26 /* SearchLocationCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78800DB2D12D19900EF8A26 /* SearchLocationCellDelegate.swift */; };
+		B78800DE2D1700E000EF8A26 /* SearchDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78800DD2D1700E000EF8A26 /* SearchDataManager.swift */; };
 		B78CE5C12CCD298800B218B2 /* AntipastoProTrial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B78CE5C02CCD298800B218B2 /* AntipastoProTrial.ttf */; };
 		B78CE5C32CCD29C600B218B2 /* AntipastoPro-Bold_trial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B78CE5C22CCD29C600B218B2 /* AntipastoPro-Bold_trial.ttf */; };
 		B78CE5C72CCD328300B218B2 /* abosanovabold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B78CE5C52CCD328300B218B2 /* abosanovabold.ttf */; };
@@ -73,6 +74,7 @@
 		B7704A852CA2FDF300B20DA4 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		B78800D92D114C0600EF8A26 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		B78800DB2D12D19900EF8A26 /* SearchLocationCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationCellDelegate.swift; sourceTree = "<group>"; };
+		B78800DD2D1700E000EF8A26 /* SearchDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDataManager.swift; sourceTree = "<group>"; };
 		B78CE5C02CCD298800B218B2 /* AntipastoProTrial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntipastoProTrial.ttf; sourceTree = "<group>"; };
 		B78CE5C22CCD29C600B218B2 /* AntipastoPro-Bold_trial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AntipastoPro-Bold_trial.ttf"; sourceTree = "<group>"; };
 		B78CE5C52CCD328300B218B2 /* abosanovabold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = abosanovabold.ttf; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			children = (
 				B7704A7D2C9706B700B20DA4 /* DataManager.swift */,
 				B75214062CAABC200010CFC3 /* ForecastDataManager.swift */,
+				B78800DD2D1700E000EF8A26 /* SearchDataManager.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 				B705E1232CB284D000FDFE3A /* LocationManager.swift in Sources */,
 				B7704A6F2C9434AB00B20DA4 /* CellTop.swift in Sources */,
 				B7704A862CA2FDF300B20DA4 /* Notification.swift in Sources */,
+				B78800DE2D1700E000EF8A26 /* SearchDataManager.swift in Sources */,
 				B75213FF2CA810F40010CFC3 /* CellWeekWether.swift in Sources */,
 				B7704A842CA06DA800B20DA4 /* Constants.swift in Sources */,
 				B7704A502C932A2200B20DA4 /* SceneDelegate.swift in Sources */,

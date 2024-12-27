@@ -13,14 +13,13 @@ class ViewController: UIViewController, Logable {
     
     private var tableViewBottomConstraint: NSLayoutConstraint!
     
-    private var lastIndexPathTableView: IndexPath = IndexPath(row: 0, section: 0)
+//    private var lastIndexPathTableView: IndexPath = IndexPath(row: 0, section: 0)
     
     // MARK: - UI Components
     
     private let tableView: UITableView = {
         let tableView = UITableView()
         
-        //tableView.backgroundColor = .orange
         // Register cells
         tableView.register(CellTop.self, forCellReuseIdentifier: CellTop.identifier)
         tableView.register(CellWeekWether.self, forCellReuseIdentifier: CellWeekWether.identifier)
@@ -71,10 +70,12 @@ class ViewController: UIViewController, Logable {
             object: nil)
         
         // MARK: Notification исчезновения клавиатуры И вызвать функцию возврата контента в исходное положение
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(moveContentBack),
-                                               name: UIResponder.keyboardWillHideNotification,
-                                               object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(moveContentBack),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
         setupUI()
     }
     

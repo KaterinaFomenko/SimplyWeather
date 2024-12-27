@@ -7,7 +7,7 @@
 import Foundation
 
 class DataManager: Logable  {
-    var logOn = true
+    var logOn = false
     
     private var locationManager: LocationManager?
     
