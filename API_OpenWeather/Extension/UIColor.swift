@@ -50,6 +50,10 @@ extension UIColor {
     static var owBackgroundBlue1: UIColor {
        return UIColor(hex: "#518EDE")
     }
+    
+    static var grayRain: UIColor {
+        return UIColor(hex: "#5C7586")
+    }
    
     
 }

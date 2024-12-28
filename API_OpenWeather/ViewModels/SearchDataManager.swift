@@ -10,7 +10,7 @@ class SearchDataManager: Logable {
     static let shared = SearchDataManager()
     weak var searchVC: SearchViewController?
     
-  //  weak var dataManager: DataManager?
+    //  weak var dataManager: DataManager?
     var arrayRecentCities: [String] = []
     var defaultCities = ["Los Angeles", "Barselona", "Paris", "Tokio", "London", "New York"]
     
@@ -18,25 +18,32 @@ class SearchDataManager: Logable {
     
     func getDisplayedCities() -> [String] {
         let resentCities = Array(arrayRecentCities.prefix(5))
-        let majorCities = Array(defaultCities.prefix(5))
-        return resentCities.isEmpty ? majorCities : resentCities + majorCities
-        
+        let allCities = resentCities.isEmpty ? defaultCities : resentCities
+        print("getDisplayedCities()")
+        print(allCities)
+        return allCities
     }
     
-    func checkCityName(_ textField: UITextField) {
-        
-        guard let nameCity = textField.text, !nameCity.isEmpty else { return }
-        
+    func saveNewCity(nameCity: String) {
+        if arrayRecentCities.isEmpty {
+            arrayRecentCities += defaultCities
+        }
         if !arrayRecentCities.contains(nameCity) {
             
             arrayRecentCities.insert(nameCity, at: 0)
             if arrayRecentCities.count > 10 {
                 arrayRecentCities.removeLast()
             }
-            
             UserDefaults.standard.set(arrayRecentCities, forKey: "RecentCities")
             UserDefaults.standard.synchronize()
         }
+    }
+    
+    func requestByCityName(_ textField: UITextField) {
+        guard let nameCity = textField.text, !nameCity.isEmpty else { return }
+        
+        //add to history list
+        saveNewCity(nameCity: nameCity)
         
         // dataManager?.loadData(nameCity: nameCity)
         // Можно использовать NotificationCenter, если нужно отправить уведомление
@@ -47,6 +54,6 @@ class SearchDataManager: Logable {
             userInfo: userInfo
         )
     }
-
+    
     
 }

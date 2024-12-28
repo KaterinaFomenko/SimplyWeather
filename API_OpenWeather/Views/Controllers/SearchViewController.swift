@@ -13,9 +13,6 @@ class SearchViewController: UIViewController, Logable {
     var logOn: Bool = true
     
     // MARK: - Variables
-  
-   // private var arrayRecentCities: [String] = []
-   // private var defaultCities = ["Los Angeles", "Barselona", "Paris", "Tokio", "London", "New York"]
     
     // MARK: - UI Components
     private var viewFon: UIView = {
@@ -88,7 +85,7 @@ class SearchViewController: UIViewController, Logable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .grayRain.withAlphaComponent(0.8)
         listTableView.delegate = self
         listTableView.dataSource = self
         searchField.delegate = self
@@ -165,6 +162,7 @@ class SearchViewController: UIViewController, Logable {
         }
     }
     
+    
     // MARK: - Actions
     @objc private func currentLocation() {
         d.print("Button currentLocation tapped!", self)
@@ -174,7 +172,7 @@ class SearchViewController: UIViewController, Logable {
     
     @objc private func buttonTapped() {
         d.print("Button OK tapped!", self)
-        //textFieldDidEndEditing(searchField)
+        SearchDataManager.shared.requestByCityName(searchField)
     }
     
 //    @objc private func dismissKeyboard() {
@@ -194,7 +192,7 @@ extension SearchViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         //listTableView.reloadData()
-        listTableView.isHidden = SearchDataManager.shared.arrayRecentCities.isEmpty
+        listTableView.isHidden = false
        }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -206,7 +204,8 @@ extension SearchViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        SearchDataManager.shared.checkCityName(textField)
+        SearchDataManager.shared.requestByCityName(textField)
+//        listTableView.isHidden = true
 //        d.print("textFieldDidEndEditing", self)
 //        guard let nameCity = textField.text, !nameCity.isEmpty else { return }
 //        
