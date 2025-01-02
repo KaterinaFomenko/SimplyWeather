@@ -216,11 +216,9 @@ class TodayWeatherCell: UITableViewCell {
             blurEffectFonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
             summaryStack.topAnchor.constraint(equalTo: descriptionLineStack.bottomAnchor, constant: 20),
-            summaryStack.bottomAnchor.constraint(equalTo: blurEffectFonView.bottomAnchor, constant: -10),
-            summaryStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 40),
-            summaryStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -40),
-            
-            
+            summaryStack.bottomAnchor.constraint(equalTo: blurEffectFonView.bottomAnchor, constant: 0),
+            summaryStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 20),
+            summaryStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -20),
             
             descriptionLineStack.topAnchor.constraint(equalTo: blurEffectFonView.topAnchor, constant: 0),
             //descriptionLineStack.bottomAnchor.constraint(equalTo: summaryStack.topAnchor, constant: -20),

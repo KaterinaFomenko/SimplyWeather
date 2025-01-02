@@ -13,6 +13,9 @@ class SearchViewController: UIViewController, Logable {
     var logOn: Bool = true
     
     // MARK: - Variables
+    private var arrayDisplayedCities: [String] = {
+        SearchDataManager.shared.getDisplayedCities()
+    }()
     
     // MARK: - UI Components
     private var viewFon: UIView = {
@@ -54,7 +57,7 @@ class SearchViewController: UIViewController, Logable {
     }()
     
     private lazy var actionButton: UIButton = {
-        let button = UIButton(type: .system) // Use .system for standard button styling
+        let button = UIButton(type: .system)
         let buttonImage = UIImage(systemName: "location.fill")
         button.setImage(buttonImage, for: .normal)
         
@@ -68,9 +71,8 @@ class SearchViewController: UIViewController, Logable {
     }()
     
     private let listTableView: UITableView = {
-       let tableView = UITableView()
-        tableView.isHidden = true
-        //tableView.backgroundColor = .green
+        let tableView = UITableView()
+        tableView.roundCorner()
         return tableView
     }()
     
@@ -85,25 +87,24 @@ class SearchViewController: UIViewController, Logable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureDelegates()
+        configureView()
+        loadRecentCities()
+        
+        setupUI()
+    }
+    
+    func configureView() {
         view.backgroundColor = .grayRain.withAlphaComponent(0.8)
+    }
+    
+    func configureDelegates() {
+        SearchDataManager.shared.searchVC = self  // for singlton
         listTableView.delegate = self
         listTableView.dataSource = self
         searchField.delegate = self
-        
-        SearchDataManager.shared.searchVC = self  // for singlton
-        
-        loadRecentCities()
-        updateCityHistory()
-        
-        setupUI()
-        //setupGestureRecognizers()
     }
     
-    func updateCityHistory() {
-        listTableView.reloadData()
-        //listTableView.isHidden = arrayRecentCities.isEmpty
-        //listTableView.isHidden = SearchDataManager.shared.arrayRecentCities.isEmpty
-    }
     // MARK: - Methods
     private func setupUI() {
         
@@ -143,25 +144,27 @@ class SearchViewController: UIViewController, Logable {
             listTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             listTableView.heightAnchor.constraint(equalToConstant: 200)
         ])
-        
-        // viewFon.setGradientBackground(UIColor(hex: "5F9BDC"), UIColor(hex: "77AAD2"))
     }
-    
-//    private func setupGestureRecognizers() {
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-//        view.addGestureRecognizer(tapGesture)
-//    }
     
     private func setupCellTableView() {
         listTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CityCell")
     }
     
-    private func loadRecentCities() {
-        if let savedCities = UserDefaults.standard.array(forKey: "RecentCities") as? [String] {
-            SearchDataManager.shared.arrayRecentCities = savedCities
-        }
-    }
     
+    // Читаем данные из UserDefaults
+    private func loadRecentCities() {
+        listTableView.isHidden = false
+        
+        arrayDisplayedCities = UserSaving.getRecentCities()
+        print("Читаем данные из UserDefaults from DisplayedCities: \(arrayDisplayedCities)")
+        
+        /*
+        if let savedCities = UserDefaults.standard.array(forKey: "RecentCities") as? [String] {
+            arrayDisplayedCities = savedCities
+            print("Читаем данные из UserDefaults from DisplayedCities: \(savedCities)")
+        }
+         */
+    }
     
     // MARK: - Actions
     @objc private func currentLocation() {
@@ -173,27 +176,23 @@ class SearchViewController: UIViewController, Logable {
     @objc private func buttonTapped() {
         d.print("Button OK tapped!", self)
         SearchDataManager.shared.requestByCityName(searchField)
+        dismiss(animated: true)
     }
-    
-//    @objc private func dismissKeyboard() {
-//           view.endEditing(true)
-//    }
 }
 
 // MARK: - UITextFieldDelegate
 extension SearchViewController: UITextFieldDelegate {
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        
+//        d.print("Return button pressed", self)
+//        //textField.resignFirstResponder()
+//        return true
+//    }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        d.print("Return button pressed", self)
-        //textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        //listTableView.reloadData()
-        listTableView.isHidden = false
-       }
+    //    func textFieldDidBeginEditing(_ textField: UITextField) {
+    //        //listTableView.reloadData()
+    //        listTableView.isHidden = false
+    //       }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         d.print("textFieldShouldEndEditing", self)
@@ -205,51 +204,63 @@ extension SearchViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         SearchDataManager.shared.requestByCityName(textField)
-//        listTableView.isHidden = true
-//        d.print("textFieldDidEndEditing", self)
-//        guard let nameCity = textField.text, !nameCity.isEmpty else { return }
-//        
-//        if !SearchDataManager.shared.arrayRecentCities.contains(nameCity) {
-//            SearchDataManager.shared.arrayRecentCities.insert(nameCity, at: 0)
-//            if SearchDataManager.shared.arrayRecentCities.count > 9 {
-//                SearchDataManager.shared.arrayRecentCities.removeLast()
-//            }
-//            
-//            UserDefaults.standard.set(SearchDataManager.shared.arrayRecentCities, forKey: "RecentCities")
-//            UserDefaults.standard.synchronize()
-//        }
-//        // dataManager?.loadData(nameCity: nameCity)
-//        // Можно использовать NotificationCenter, если нужно отправить уведомление
-//        let userInfo = ["CityName": nameCity]
-//        NotificationCenter.default.post(name: .sendCityNameNotify, object: nil, userInfo: userInfo)
-//        
-//        searchField.text = ""
-//        //dismiss(animated: true)
+        //  listTableView.reloadData() ???
     }
-     
+    
 }
 
 // MARK: - UITableViewDelegate
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        SearchDataManager.shared.getDisplayedCities().count
+        //SearchDataManager.shared.getDisplayedCities().count
+        print("Count of arrayDisplayedCities: \(arrayDisplayedCities.count)")
+        print("arrayDisplayedCities: \(arrayDisplayedCities)")
+        return arrayDisplayedCities.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CityCell", for: indexPath)
-        let city = SearchDataManager.shared.getDisplayedCities()
-        cell.textLabel?.text = city[indexPath.row]
-        //cell.textLabel?.text = SearchDataManager.shared.arrayRecentCities[indexPath.row]
+        //let city = SearchDataManager.shared.getDisplayedCities()
+        //cell.textLabel?.text = city[indexPath.row]
+        cell.textLabel?.text = arrayDisplayedCities[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        d.print("Delegat of tableView: didSelectRowAt", self)
-        let selectCity = SearchDataManager.shared.getDisplayedCities()[indexPath.row]
-        
+       
+       // let selectCity = SearchDataManager.shared.getDisplayedCities()[indexPath.row]
+        let selectCity = arrayDisplayedCities[indexPath.row]
         searchField.text = selectCity
-        //listTableView.isHidden = true
         searchField.resignFirstResponder()
-        //dismissKeyboard()
+    }
+    
+//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+//        return .delete
+//    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            print("Before deletion: \(arrayDisplayedCities)")
+            
+            // Удаляем город из массива
+            let cityRemove = arrayDisplayedCities[indexPath.row]
+            arrayDisplayedCities.remove(at: indexPath.row)
+            print ("remote city: \(cityRemove)")
+           
+            //UserDefaults.standard.set(arrayDisplayedCities, forKey: "RecentCities")
+            UserSaving.saveRecentCities(arrayDisplayedCities)
+            print("Saved array new arrayDisplayedCities \(arrayDisplayedCities)")
+
+            
+//            if let savedCities = UserDefaults.standard.array(forKey: "DisplayedCities") as? [String] {
+//                arrayDisplayedCities = savedCities
+//            }
+
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            print("After deletion: \(arrayDisplayedCities)")
+          
+        }
     }
 }

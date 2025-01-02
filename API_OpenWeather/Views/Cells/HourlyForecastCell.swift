@@ -134,7 +134,7 @@ class HourlyForecastCell: UITableViewCell, Logable {
         let vStack = UIElementFactory.createStackView(
             arrangedSubview: [titleLabel, line],
             axis: .vertical,
-            spacing: 20,
+            spacing: 10,
             alignment: .fill
         )
         return vStack
@@ -311,8 +311,8 @@ class HourlyForecastCell: UITableViewCell, Logable {
             summaryStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
             summaryStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
             
-            titleLineStack.topAnchor.constraint(equalTo: blurEffectFonView.topAnchor, constant: 20),
-            titleLineStack.bottomAnchor.constraint(equalTo: scrollView.topAnchor, constant: -10),
+            titleLineStack.topAnchor.constraint(equalTo: blurEffectFonView.topAnchor, constant: 10),
+            titleLineStack.bottomAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
             titleLineStack.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor, constant: 20),
             titleLineStack.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor, constant: -20),
             

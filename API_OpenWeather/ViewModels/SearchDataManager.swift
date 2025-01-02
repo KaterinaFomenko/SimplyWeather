@@ -19,24 +19,8 @@ class SearchDataManager: Logable {
     func getDisplayedCities() -> [String] {
         let resentCities = Array(arrayRecentCities.prefix(5))
         let allCities = resentCities.isEmpty ? defaultCities : resentCities
-        print("getDisplayedCities()")
-        print(allCities)
+        print("getDisplayedCities: \(allCities)")
         return allCities
-    }
-    
-    func saveNewCity(nameCity: String) {
-        if arrayRecentCities.isEmpty {
-            arrayRecentCities += defaultCities
-        }
-        if !arrayRecentCities.contains(nameCity) {
-            
-            arrayRecentCities.insert(nameCity, at: 0)
-            if arrayRecentCities.count > 10 {
-                arrayRecentCities.removeLast()
-            }
-            UserDefaults.standard.set(arrayRecentCities, forKey: "RecentCities")
-            UserDefaults.standard.synchronize()
-        }
     }
     
     func requestByCityName(_ textField: UITextField) {
@@ -55,5 +39,19 @@ class SearchDataManager: Logable {
         )
     }
     
-    
+    func saveNewCity(nameCity: String) {
+            if arrayRecentCities.isEmpty {
+                arrayRecentCities += defaultCities
+            }
+        
+            if !arrayRecentCities.contains(nameCity) {
+                
+                arrayRecentCities.insert(nameCity, at: 0)
+                if arrayRecentCities.count > 10 {
+                    arrayRecentCities.removeLast()
+                }
+                UserDefaults.standard.set(arrayRecentCities, forKey: "RecentCities")
+                UserDefaults.standard.synchronize()
+            }
+        }
 }

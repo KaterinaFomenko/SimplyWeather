@@ -13,8 +13,6 @@ class ViewController: UIViewController, Logable {
     
     private var tableViewBottomConstraint: NSLayoutConstraint!
     
-//    private var lastIndexPathTableView: IndexPath = IndexPath(row: 0, section: 0)
-    
     // MARK: - UI Components
     
     private let tableView: UITableView = {
@@ -81,7 +79,9 @@ class ViewController: UIViewController, Logable {
     
     override func viewDidAppear(_ animated: Bool) {
         d.print("viewDidAppear", self)
-        self.view.setGradientBackground(UIColor(hex: "5598E4"), UIColor(hex: "7CADD0"))
+       // self.view.setGradientBackground(UIColor(hex: "5598E4"), UIColor(hex: "7CADD0"))
+        // 6DA5C8
+        self.view.setGradientBackground(UIColor(hex: "6DA5C8"), UIColor(hex: "7CADD0"))
         
         //        if let firstWeather = DataManager.shared.weatherArray.first {
         //            setBackGroundImage(firstWeather.weatherIDBackground)
