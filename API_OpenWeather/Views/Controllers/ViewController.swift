@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 
 class ViewController: UIViewController, Logable {
-    var logOn: Bool = true
+    var logOn: Bool = false
     
     private var tableViewBottomConstraint: NSLayoutConstraint!
     
@@ -82,10 +82,6 @@ class ViewController: UIViewController, Logable {
        // self.view.setGradientBackground(UIColor(hex: "5598E4"), UIColor(hex: "7CADD0"))
         // 6DA5C8
         self.view.setGradientBackground(UIColor(hex: "6DA5C8"), UIColor(hex: "7CADD0"))
-        
-        //        if let firstWeather = DataManager.shared.weatherArray.first {
-        //            setBackGroundImage(firstWeather.weatherIDBackground)
-        //        }
     }
     
     // фон в зав-ти от ID:
@@ -128,12 +124,7 @@ class ViewController: UIViewController, Logable {
         
         // Изменяем нижний констрейнт на высоту клавиатуры
         tableViewBottomConstraint.constant = -keyboardHeight - 10
-        //scrollToBottom()
-        
-        //lastIndexPathTableView = IndexPath(row: DataManager.shared.weatherArray.count - 1, section: 0)
-        
-        //tableView.scrollToRow(at: lastIndexPathTableView, at: .top, animated: true)
-        
+    
         // Анимируем изменение
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
@@ -150,24 +141,13 @@ class ViewController: UIViewController, Logable {
         }
     }
     
-    //    func scrollToBottom() {
-    //        let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + tableView.contentInset.bottom)
-    //        tableView.setContentOffset(bottomOffset, animated: true)
-    //    }
-    
     func updateData(nameCity: String) {
         
         if !nameCity.isEmpty {
             d.print("+++Save City = \(nameCity)", self)
             UserSaving.saveParam(key: .savedCity, value: nameCity)
         }
-        
         self.tableView.reloadData()
-        
-        //        if let firstWeather = DataManager.shared.weatherArray.first {
-        //            print("\nVC Погода в городе \(firstWeather.nameCity): \(firstWeather.description)")
-        //            setBackGroundImage(firstWeather.weatherIDBackground)
-        //        }
     }
     
     // MARK: - UISetup
@@ -208,9 +188,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         case 1:
             return Constant.heightCellToday
         case 2:
-            return Constant.heightCellHours
-        case 3:
             return Constant.heightWeatherWeek
+        case 3:
+            return Constant.heightCellHours
         case 4:
             return Constant.heightSearchLocation
             
@@ -241,23 +221,23 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             
         case 2:
             let cell = tableView.dequeueReusableCell(
-                withIdentifier: HourlyForecastCell.identifier,
-                for: indexPath
-            ) as! HourlyForecastCell
-            let hoursForecastArray = ForecastDataManager.shared.hoursForecastArray
-            d.print("!!! VC Data from hoursForecastArray \(hoursForecastArray)", self)
-            cell.configure(array: hoursForecastArray)
-            cell.selectedBackgroundView = getClearView() // selectedBackgroundView
-            return cell
-            
-        case 3:
-            let cell = tableView.dequeueReusableCell(
                 withIdentifier: CellWeekWether.identifier,
                 for: indexPath
             ) as! CellWeekWether
             let forecastArray = ForecastDataManager.shared.forecastArray
             d.print("===VC Data from ForecastDataManager \(forecastArray)", self)
             cell.configure(array: forecastArray)
+            cell.selectedBackgroundView = getClearView() // selectedBackgroundView
+            return cell
+            
+        case 3:
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: HourlyForecastCell.identifier,
+                for: indexPath
+            ) as! HourlyForecastCell
+            let hoursForecastArray = ForecastDataManager.shared.hoursForecastArray
+            d.print("!!! VC Data from hoursForecastArray \(hoursForecastArray)", self)
+            cell.configure(array: hoursForecastArray)
             cell.selectedBackgroundView = getClearView() // selectedBackgroundView
             return cell
             

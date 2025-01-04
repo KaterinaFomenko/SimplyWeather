@@ -60,68 +60,13 @@ class CellWeekWether: UITableViewCell {
     var currentDay = Date().formatted(.dateTime.weekday(.abbreviated)).uppercased() //THU
     
     // MARK: - UI Components
-    
-    private lazy var scrollView: UIScrollView = {
-            let scroll = UIScrollView()
-            scroll.showsHorizontalScrollIndicator = true
-          //  scroll.contentSize = contentSize
-            scroll.backgroundColor = .clear
-            return scroll
-        }()
-    
     private lazy var contentViewInScroll: UIView = {
         let contentView = UIView()
-        
         contentView.setupBlurEffect()
         contentView.roundCorner()
-     //   contentView.frame.size = contentSize
         contentView.backgroundColor = .clear
-        
         return contentView
     }()
-    
-    // StackView for descriptionLabel and line
-    private lazy var vStackGeneral: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [descriptionLabel, vStackDescriptionLine])
-       // vStack.backgroundColor = .systemPink
-        vStack.axis = .vertical
-        vStack.spacing = 10
-        vStack.alignment = .center
-        vStack.isLayoutMarginsRelativeArrangement = true
-        vStack.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 0)
-        return vStack
-    }()
-    
-    // StackView for descriptionLabel and line
-    private lazy var vStackDescriptionLine: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [descriptionLabel, line])
-       // vStack.backgroundColor = .systemPink
-        vStack.axis = .vertical
-        vStack.spacing = 10
-        vStack.alignment = .center
-        vStack.isLayoutMarginsRelativeArrangement = true
-        vStack.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 0)
-        return vStack
-    }()
-    
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont.customFont(size: 20, weight: .regular)
-        label.text = "Title"
-        return label
-    }()
-    
-    private let line: UIView = {
-       let line = UIView()
-        line.backgroundColor = .white
-        return line
-    }()
-    
-//    private var contentSize: CGSize {
-//        CGSize(width: contentView.frame.width , height: contentView.frame.height)
-//    }
     
     // MARK: - Life Cycle
     
@@ -148,13 +93,12 @@ class CellWeekWether: UITableViewCell {
         
         // Устанавливаем дни недели в labels
         for (i, day) in fiveDays.enumerated() {
-           
+            
             daysLabels[i].text = day
-           
-            if i < array.count { // Проверяем, что индекс не выходит за пределы массива температур
+            
+            if i < array.count {
                 tempsLabels[i].text = array[i].temp.convertFarhToCelsium().convertToString() + "\u{00B0}"
-               
-                imagesForecast[i].sd_setImage(with: array[i].logoURL, placeholderImage: UIImage(systemName: "questionmark"))
+                imagesForecast[i].image = UIImage(named: array[i].logoURL)
             }
         }
     }
@@ -169,8 +113,8 @@ class CellWeekWether: UITableViewCell {
             
             label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                label.heightAnchor.constraint(equalToConstant: 30), // Задание фиксированной высоты
-                label.widthAnchor.constraint(equalToConstant: 50)  // Задание фиксированной ширины
+                label.heightAnchor.constraint(equalToConstant: 30),
+                label.widthAnchor.constraint(equalToConstant: 50)
             ])
             daysLabels.append(label)
         }
@@ -186,8 +130,8 @@ class CellWeekWether: UITableViewCell {
             
             label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                label.heightAnchor.constraint(equalToConstant: 50), // Задание фиксированной высоты
-                label.widthAnchor.constraint(equalToConstant: 50)  // Задание фиксированной ширины
+                label.heightAnchor.constraint(equalToConstant: 50),
+                label.widthAnchor.constraint(equalToConstant: 50)
             ])
             tempsLabels.append(label)
         }
@@ -198,79 +142,63 @@ class CellWeekWether: UITableViewCell {
             let iv = UIImageView()
             iv.contentMode = .scaleAspectFit
             iv.image = imageCase.imageForDay
-            iv.tintColor = .black
-
+            iv.tintColor = .white
+            
             iv.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                iv.heightAnchor.constraint(equalToConstant: 50), // Задание фиксированной высоты
-                iv.widthAnchor.constraint(equalToConstant: 80)  // Задание фиксированной ширины
+                iv.heightAnchor.constraint(equalToConstant: 60),
+                iv.widthAnchor.constraint(equalToConstant: 80)
             ])
-
             imagesForecast.append(iv)
         }
     }
-
+    
     private func layoutLabels() {
         
         let daysStackView = UIStackView(arrangedSubviews: daysLabels)
-       // daysStackView.backgroundColor = .red
+        // daysStackView.backgroundColor = .red
         daysStackView.axis = .horizontal
-        daysStackView.spacing = 8
+        daysStackView.spacing = 5
         daysStackView.distribution = .fillEqually
         daysStackView.alignment = .center
         
         let tempsStackView = UIStackView(arrangedSubviews: tempsLabels)
         //tempsStackView.backgroundColor = .purple
         tempsStackView.axis = .horizontal
-        tempsStackView.spacing = 8
+        tempsStackView.spacing = 5
         tempsStackView.distribution = .fillEqually
         tempsStackView.alignment = .center
         
         let imageStackView = UIStackView(arrangedSubviews: imagesForecast)
         //imageStackView.backgroundColor = .green
         imageStackView.axis = .horizontal
-        imageStackView.spacing = 8
+        imageStackView.spacing = 5
         imageStackView.distribution = .fillEqually
         imageStackView.alignment = .center
         
-        let mainStackView = UIStackView(arrangedSubviews: [daysStackView, imageStackView, tempsStackView])
+        let mainStackView = UIStackView(arrangedSubviews: [daysStackView,  tempsStackView, imageStackView])
         mainStackView.axis = .vertical
         mainStackView.spacing = 0
-        mainStackView.distribution = .fillEqually
+        mainStackView.distribution = .equalSpacing //.fillEqually
         
         contentViewInScroll.addSubview(mainStackView)
         contentView.addSubview(contentViewInScroll)
         
         contentViewInScroll.translatesAutoresizingMaskIntoConstraints = false
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
-      
+        
         NSLayoutConstraint.activate([
-           
-            contentViewInScroll.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            
+            contentViewInScroll.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
             contentViewInScroll.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             contentViewInScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             contentViewInScroll.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            // Фиксация ширины контента
-            
-            mainStackView.topAnchor.constraint(equalTo: contentViewInScroll.topAnchor, constant: 0),
+            mainStackView.topAnchor.constraint(equalTo: contentViewInScroll.topAnchor, constant: 10),
             mainStackView.bottomAnchor.constraint(equalTo: contentViewInScroll.bottomAnchor, constant: 0),
-            mainStackView.leadingAnchor.constraint(equalTo: contentViewInScroll.leadingAnchor, constant: 20),
-            mainStackView.trailingAnchor.constraint(equalTo: contentViewInScroll.trailingAnchor, constant: -20),
-            
-            mainStackView.heightAnchor.constraint(equalToConstant: 150)
+            mainStackView.leadingAnchor.constraint(equalTo: contentViewInScroll.leadingAnchor, constant: 10),
+            mainStackView.trailingAnchor.constraint(equalTo: contentViewInScroll.trailingAnchor, constant: -10)
         ])
     }
-    
-    override func layoutSubviews() {
-           super.layoutSubviews()
-           
-           // Обновляем размер градиентного слоя при изменении размеров ячейки
-           contentViewInScroll.layer.sublayers?.forEach { layer in
-               if layer is CAGradientLayer {
-                   layer.frame = contentViewInScroll.bounds
-               }
-           }
-       }
 }
 

@@ -16,30 +16,42 @@ struct ForecastModel {
         return String(format: "%.1f", temp)
     }
     
-    var logoURL: URL? {
+    var logoURL2: URL? {
         return URL(string: "https://openweathermap.org/img/wn/\(getImageId)@2x.png")
+    }
+    
+    var logoURL: String {
+        return "\(getImageId).png"
     }
 
     var getImageId: String {
         switch id {
         case 200...232:
-            return "11d"
+           // return "11d" // thunderstorm
+            return "16_thunderstorm"
         case 300...321:
-            return "09d"
+           // return "09d" // shower rain
+            return "6_rain"
         case 500...504:
-            return "10d"
+           // return "10d" // rain
+            return "7_rainSun"
         case 511:
-            return "13d"
+          //  return "13d" // snow
+            return "9_snowflake"
         case 520...531:
-            return "09d"
+         //   return "09d" // shower rain
+            return "6_rain"
         case 600...622:
-            return "13d"
+        //    return "13d" // snow
+            return "10_darkCloudSnowind"
         case 701...781:
-            return "50d"
+            return "50d"  // mist
         case 800:
-            return "01d"
+        //   return "01d" // clear sky
+            return "2_sun"
         case 801...804:
-            return "04d"
+       //     return "04d" // broken clouds
+            return "3_twoClouds"
         default:
             return "0"
         }

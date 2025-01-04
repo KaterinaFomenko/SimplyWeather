@@ -107,7 +107,8 @@ class TodayWeatherCell: UITableViewCell {
     private let imageChoice: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.tintColor = .systemYellow
+        //iv.layer.contentsRect = CGRect(x: 0, y: -2, width: 10, height: 10)
+        iv.tintColor = .white
         return iv
     }()
     
@@ -189,7 +190,10 @@ class TodayWeatherCell: UITableViewCell {
         descriptionLabel.text = model.description.capitalized
         
         cityLabel.text = model.nameCity
-        imageChoice.sd_setImage(with: model.logoURL, placeholderImage: UIImage(systemName: "questionmark"))
+        
+        let image = UIImage(named: model.logoURL)?
+            .withAlignmentRectInsets(UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
+        imageChoice.image = image
         
         updateTempLabel(with: temperatureString)
     }

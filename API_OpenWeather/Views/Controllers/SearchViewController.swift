@@ -150,7 +150,6 @@ class SearchViewController: UIViewController, Logable {
         listTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CityCell")
     }
     
-    
     // Читаем данные из UserDefaults
     private func loadRecentCities() {
         listTableView.isHidden = false
@@ -159,10 +158,10 @@ class SearchViewController: UIViewController, Logable {
         print("Читаем данные из UserDefaults from DisplayedCities: \(arrayDisplayedCities)")
         
         /*
-        if let savedCities = UserDefaults.standard.array(forKey: "RecentCities") as? [String] {
-            arrayDisplayedCities = savedCities
-            print("Читаем данные из UserDefaults from DisplayedCities: \(savedCities)")
-        }
+         if let savedCities = UserDefaults.standard.array(forKey: "RecentCities") as? [String] {
+         arrayDisplayedCities = savedCities
+         print("Читаем данные из UserDefaults from DisplayedCities: \(savedCities)")
+         }
          */
     }
     
@@ -182,12 +181,12 @@ class SearchViewController: UIViewController, Logable {
 
 // MARK: - UITextFieldDelegate
 extension SearchViewController: UITextFieldDelegate {
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        
-//        d.print("Return button pressed", self)
-//        //textField.resignFirstResponder()
-//        return true
-//    }
+    //    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    //
+    //        d.print("Return button pressed", self)
+    //        //textField.resignFirstResponder()
+    //        return true
+    //    }
     
     //    func textFieldDidBeginEditing(_ textField: UITextField) {
     //        //listTableView.reloadData()
@@ -212,7 +211,7 @@ extension SearchViewController: UITextFieldDelegate {
 // MARK: - UITableViewDelegate
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //SearchDataManager.shared.getDisplayedCities().count
+        
         print("Count of arrayDisplayedCities: \(arrayDisplayedCities.count)")
         print("arrayDisplayedCities: \(arrayDisplayedCities)")
         return arrayDisplayedCities.count
@@ -220,47 +219,29 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CityCell", for: indexPath)
-        //let city = SearchDataManager.shared.getDisplayedCities()
-        //cell.textLabel?.text = city[indexPath.row]
         cell.textLabel?.text = arrayDisplayedCities[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
-       // let selectCity = SearchDataManager.shared.getDisplayedCities()[indexPath.row]
         let selectCity = arrayDisplayedCities[indexPath.row]
         searchField.text = selectCity
         searchField.resignFirstResponder()
     }
     
-//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-//        return .delete
-//    }
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            
-            print("Before deletion: \(arrayDisplayedCities)")
-            
-            // Удаляем город из массива
-            let cityRemove = arrayDisplayedCities[indexPath.row]
-            arrayDisplayedCities.remove(at: indexPath.row)
-            print ("remote city: \(cityRemove)")
-           
-            //UserDefaults.standard.set(arrayDisplayedCities, forKey: "RecentCities")
-            UserSaving.saveRecentCities(arrayDisplayedCities)
-            print("Saved array new arrayDisplayedCities \(arrayDisplayedCities)")
-
-            
-//            if let savedCities = UserDefaults.standard.array(forKey: "DisplayedCities") as? [String] {
-//                arrayDisplayedCities = savedCities
-//            }
-
-            
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            print("After deletion: \(arrayDisplayedCities)")
-          
-        }
+        guard editingStyle == .delete else {return}
+        
+        // Удаляем город из массива
+        let cityRemove = arrayDisplayedCities[indexPath.row]
+        arrayDisplayedCities.remove(at: indexPath.row)
+        print ("remote city: \(cityRemove)")
+        
+        UserSaving.saveRecentCities(arrayDisplayedCities)
+        print("Saved array new arrayDisplayedCities \(arrayDisplayedCities)")
+        
+        tableView.deleteRows(at: [indexPath], with: .fade)
+        print("After deletion: \(arrayDisplayedCities)")
     }
 }
+

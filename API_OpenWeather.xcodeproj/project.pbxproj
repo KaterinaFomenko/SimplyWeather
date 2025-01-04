@@ -210,9 +210,9 @@
 				B7A35B932CFB1C4F0081B441 /* Helpers */,
 				B7704A6E2C9434AB00B20DA4 /* CellTop.swift */,
 				B7704A702C94448F00B20DA4 /* TodayWeatherCell.swift */,
+				B75213FE2CA810F40010CFC3 /* CellWeekWether.swift */,
 				B78CE5CF2CD2758900B218B2 /* HourlyForecastCell.swift */,
 				B7704A812CA06C4600B20DA4 /* SearchLocationCell.swift */,
-				B75213FE2CA810F40010CFC3 /* CellWeekWether.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";

@@ -154,7 +154,7 @@ class HourlyForecastCell: UITableViewCell, Logable {
         return UIElementFactory.createStackView(
             arrangedSubview: tempsOneLabels,
             axis: .horizontal,
-            spacing: 8,
+            spacing: 0,
             alignment: .center,
             distribution: .fillEqually
         )
@@ -164,7 +164,7 @@ class HourlyForecastCell: UITableViewCell, Logable {
         return UIElementFactory.createStackView(
             arrangedSubview: imagesOneForecast,
             axis: .horizontal,
-            spacing: 8,
+            spacing: 0,
             alignment: .center,
             distribution: .fillEqually
         )
@@ -176,9 +176,9 @@ class HourlyForecastCell: UITableViewCell, Logable {
             axis: .vertical,
             spacing: 0,
             alignment: .fill,
-            distribution: .fillEqually
+            distribution: .fill
         )
-       // stack.backgroundColor = .systemPink
+        //stack.backgroundColor = .systemPink
         return stack
     }()
     
@@ -218,11 +218,6 @@ class HourlyForecastCell: UITableViewCell, Logable {
     
     public func configure(array: [ForecastModel]) {
         d.print("!!! arrayHours count: \(array.count) ", self)
-//        let testArray = [
-//            ForecastModel(id: 804, temp: 55.36, dataTxt: "2024-10-31 12:00:00"),
-//            ForecastModel(id: 804, temp: 54.99, dataTxt: "2024-10-31 15:00:00")
-//        ]
-        
         // Получаем 16 часов в двух днях
         let hoursTwoDays = ForecastDataManager.shared.hoursForecastArray
             
@@ -237,7 +232,9 @@ class HourlyForecastCell: UITableViewCell, Logable {
                 
                 tempsOneLabels[i].text = array[i].temp.convertFarhToCelsium().rounded().convertToString() + "\u{00B0}"
                 
-                imagesOneForecast[i].sd_setImage(with: array[i].logoURL, placeholderImage: UIImage(systemName: "questionmark"))
+                let image = UIImage(named: array[i].logoURL)?
+                    .withAlignmentRectInsets(UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
+                imagesOneForecast[i].image = image
             }
         }
     }
@@ -256,7 +253,6 @@ class HourlyForecastCell: UITableViewCell, Logable {
                 label.heightAnchor.constraint(equalToConstant: 30),
                 label.widthAnchor.constraint(equalToConstant: 50)
             ])
-            
             hoursLabels.append(label)
         }
     }
@@ -285,14 +281,13 @@ class HourlyForecastCell: UITableViewCell, Logable {
             let iv = UIImageView()
             iv.contentMode = .scaleAspectFit
             iv.image = imageCase.imageForDay
-            iv.tintColor = .black
+            iv.tintColor = .white
             
             iv.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                iv.heightAnchor.constraint(equalToConstant: 50), // Задание фиксированной высоты
-                iv.widthAnchor.constraint(equalToConstant: 80)  // Задание фиксированной ширины
+                iv.heightAnchor.constraint(equalToConstant: 50),
+                iv.widthAnchor.constraint(equalToConstant: 90)
             ])
-            
             imagesOneForecast.append(iv)
         }
     }
@@ -305,11 +300,11 @@ class HourlyForecastCell: UITableViewCell, Logable {
         scrollView.addSubview(summaryStackView)
         
         NSLayoutConstraint.activate([
-            //backgroundColor = .systemPink
-            summaryStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
+            
+            summaryStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 10),
             summaryStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             summaryStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
-            summaryStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
+            summaryStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -10),
             
             titleLineStack.topAnchor.constraint(equalTo: blurEffectFonView.topAnchor, constant: 10),
             titleLineStack.bottomAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
@@ -322,7 +317,7 @@ class HourlyForecastCell: UITableViewCell, Logable {
             scrollView.leadingAnchor.constraint(equalTo: blurEffectFonView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: blurEffectFonView.trailingAnchor),
             
-            blurEffectFonView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            blurEffectFonView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             blurEffectFonView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             blurEffectFonView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             blurEffectFonView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
